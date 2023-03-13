@@ -19,6 +19,14 @@ Begin VB.Form FMain
    ScaleHeight     =   6420
    ScaleWidth      =   16110
    StartUpPosition =   3  'Windows-Standard
+   Begin VB.CommandButton Command1 
+      Caption         =   "Command1"
+      Height          =   375
+      Left            =   4200
+      TabIndex        =   3
+      Top             =   0
+      Width           =   1815
+   End
    Begin VB.TextBox Text1 
       Height          =   4815
       Left            =   8040
@@ -66,6 +74,20 @@ Private m_ci As CultureInfo
 'Private m_de As CultureInfo
 'Private m_at As CultureInfo
 
+Private Sub Command1_Click()
+    
+    Dim ciud As CultureInfo: Set ciud = m_ci.UserDefaultCulture
+    Dim cidt As CultureInfo: Set cidt = m_ci.DefaultThreadCurrentCulture
+    Dim ciiv As CultureInfo: Set ciiv = m_ci.InvariantCulture
+    Dim cipa As CultureInfo: Set cipa = m_ci.Parent
+    
+    MsgBox ciud.Name & "  " & ciud.LCID & "  " & ciud.LCID_ToHex & "  " & "UserDefaultCulture"
+    MsgBox cidt.Name & "  " & cidt.LCID & "  " & cidt.LCID_ToHex & "  " & "DefaultThreadCurrentCulture"
+    MsgBox ciiv.Name & "  " & ciiv.LCID & "  " & ciiv.LCID_ToHex & "  " & "InvariantCulture"
+    MsgBox cipa.Name & "  " & cipa.LCID & "  " & cipa.LCID_ToHex & "  " & "Parent"
+    
+End Sub
+
 Private Sub Form_Load()
     Me.Caption = App.EXEName & " v" & App.Major & "." & App.Minor & "." & App.Revision
 End Sub
@@ -93,9 +115,13 @@ Private Sub CreateCultureInfos()
             LCID = j * &H400 + i
             Set ci = MNew.CultureInfo(LCID)
             langnam = ci.LanguageName
+            'If langnam <> "Sprachneutral" Then Debug.Print """" & langnam & """"
             If Len(langnam) Then
-                If Col_TryAddObject(m_CultureInfos, ci, langnam) Then
+                'If Col_TryAddObject(m_CultureInfos, ci, langnam) Then
+                If langnam <> "Sprachneutral" Then
+                If Col_TryAddObject(m_CultureInfos, ci, ci.LCID_ToHex) Then
                     'OK
+                End If
                 End If
             End If
         Next
@@ -112,10 +138,17 @@ End Sub
 
 Private Sub List1_Click()
     Dim i As Long: i = List1.ListIndex
-    Dim ln As String: ln = ParseLanguageName(List1.List(i))
-    If ln = "????? (?????)" Then Set m_ci = Nothing Else Set m_ci = m_CultureInfos.Item(ln)
+    'Dim ln As String: ln = ParseLanguageName(List1.List(i))
+    Dim ll As String: ll = ParseLCID(List1.List(i))
+    'If ln = "????? (?????)" Then Set m_ci = Nothing Else Set m_ci = m_CultureInfos.Item(ln)
+    Set m_ci = m_CultureInfos.Item(ll)
     UpdateViewDetails
 End Sub
+
+Private Function ParseLCID(s As String) As String
+    Dim sa() As String: sa = Split(s, " | ")
+    ParseLCID = sa(1)
+End Function
 
 Private Function ParseLanguageName(s As String) As String
     Dim sa() As String: sa = Split(s, " | ")

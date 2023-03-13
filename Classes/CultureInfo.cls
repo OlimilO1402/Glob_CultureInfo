@@ -12,6 +12,14 @@ Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
+'Stellt Informationen über eine bestimmte Kultur bereit
+'(die bei der nicht verwalteten Codeentwicklung als "locale" bezeichnet wird).
+'Zu diesen Informationen gehören
+' * der Name der Kultur,
+' * das Schriftsystem,
+' * der verwendete Kalender sowie
+' * die Formatierung für Datumsangaben und
+' * sortierte Zeichenfolgen.
 
 Private Const LOCALE_NEUTRAL                As Long = &H0
 Private Const LOCALE_ILANGUAGE              As Long = &H1
@@ -27,12 +35,14 @@ Private Const LOCALE_IDEFAULTCOUNTRY        As Long = &HA
 Private Const LOCALE_IDEFAULTCODEPAGE       As Long = &HB
 Private Const LOCALE_SLIST                  As Long = &HC
 Private Const LOCALE_IMEASURE               As Long = &HD
+
 Private Const LOCALE_SDECIMAL               As Long = &HE
 Private Const LOCALE_STHOUSAND              As Long = &HF
 Private Const LOCALE_SGROUPING              As Long = &H10
 Private Const LOCALE_IDIGITS                As Long = &H11
 Private Const LOCALE_ILZERO                 As Long = &H12
 Private Const LOCALE_SNATIVEDIGITS          As Long = &H13
+
 Private Const LOCALE_SCURRENCY              As Long = &H14
 Private Const LOCALE_SINTLSYMBOL            As Long = &H15
 Private Const LOCALE_SMONDECIMALSEP         As Long = &H16
@@ -42,6 +52,7 @@ Private Const LOCALE_ICURRDIGITS            As Long = &H19
 Private Const LOCALE_IINTLCURRDIGITS        As Long = &H1A
 Private Const LOCALE_ICURRENCY              As Long = &H1B
 Private Const LOCALE_INEGCURR               As Long = &H1C
+
 Private Const LOCALE_SDATE                  As Long = &H1D
 Private Const LOCALE_STIME                  As Long = &H1E
 Private Const LOCALE_SSHORTDATE             As Long = &H1F
@@ -93,6 +104,7 @@ Private Const LOCALE_SABBREVMONTHNAME9      As Long = &H4C
 Private Const LOCALE_SABBREVMONTHNAME10     As Long = &H4D
 Private Const LOCALE_SABBREVMONTHNAME11     As Long = &H4E
 Private Const LOCALE_SABBREVMONTHNAME12     As Long = &H4F
+
 Private Const LOCALE_SPOSITIVESIGN          As Long = &H50
 Private Const LOCALE_SNEGATIVESIGN          As Long = &H51
 Private Const LOCALE_IPOSSIGNPOSN           As Long = &H52
@@ -101,7 +113,9 @@ Private Const LOCALE_IPOSSYMPRECEDES        As Long = &H54
 Private Const LOCALE_IPOSSEPBYSPACE         As Long = &H55
 Private Const LOCALE_INEGSYMPRECEDES        As Long = &H56
 Private Const LOCALE_INEGSEPBYSPACE         As Long = &H57
+
 Private Const LOCALE_FONTSIGNATURE          As Long = &H58
+
 Private Const LOCALE_SISO639LANGNAME        As Long = &H59
 Private Const LOCALE_SISO3166CTRYNAME       As Long = &H5A
 
@@ -208,8 +222,8 @@ Private m_userDefaultCulture            As CultureInfo
 Private m_InvariantCultureInfo          As CultureInfo
 Private m_userDefaultUICulture          As CultureInfo
 Private m_InstalledUICultureInfo        As CultureInfo
-Private m_DefaultThreadCurrentUICulture As CultureInfo
 Private m_DefaultThreadCurrentCulture   As CultureInfo
+Private m_DefaultThreadCurrentUICulture As CultureInfo
 
 'DateTimeFormat
 Private m_DTF_MonthNames()              As String
@@ -325,24 +339,29 @@ Public Property Get CurrentCulture() As CultureInfo
 End Property
 
 Public Property Get UserDefaultCulture() As CultureInfo
-    '
+    If m_userDefaultCulture Is Nothing Then Set m_userDefaultCulture = New CultureInfo: m_userDefaultCulture.New_ LOCALE_USER_DEFAULT
+    Set UserDefaultCulture = m_userDefaultCulture
 End Property
 
-Public Property Get CurrentUICulture() As CultureInfo
-    '
-End Property
-
-Public Property Get InstalledUICulture() As CultureInfo
-    '
-End Property
-
+'Public Property Get CurrentUICulture() As CultureInfo
+'    If m_userDefaultUICulture Is Nothing Then Set m_userDefaultUICulture = New CultureInfo: m_userDefaultUICulture.NewN
+'    Set CurrentUICulture = m_userDefaultUICulture
+'End Property
+'
+'Public Property Get InstalledUICulture() As CultureInfo
+'    If m_InstalledUICultureInfo Is Nothing Then Set m_InstalledUICultureInfo = New CultureInfo: m_InstalledUICultureInfo.NewN
+'    Set InstalledUICulture = m_InstalledUICultureInfo
+'End Property
+'
 Public Property Get DefaultThreadCurrentCulture() As CultureInfo
-    '
+    If m_DefaultThreadCurrentCulture Is Nothing Then Set m_DefaultThreadCurrentCulture = New CultureInfo: m_DefaultThreadCurrentCulture.New_ &H400
+    Set DefaultThreadCurrentCulture = m_DefaultThreadCurrentCulture
 End Property
-
-Public Property Get DefaultThreadCurrentUICulture() As CultureInfo
-    '
-End Property
+'
+'Public Property Get DefaultThreadCurrentUICulture() As CultureInfo
+'    If m_DefaultThreadCurrentUICulture Is Nothing Then Set m_DefaultThreadCurrentUICulture = New CultureInfo: m_DefaultThreadCurrentUICulture.New_
+'    Set DefaultThreadCurrentUICulture = m_DefaultThreadCurrentUICulture
+'End Property
 
 Public Property Get InvariantCulture() As CultureInfo
     If m_InvariantCultureInfo Is Nothing Then Set m_InvariantCultureInfo = New CultureInfo: m_InvariantCultureInfo.New_ LOCALE_INVARIANT
@@ -350,9 +369,7 @@ Public Property Get InvariantCulture() As CultureInfo
 End Property
 
 Public Property Get Parent() As CultureInfo
-    If m_parent Is Nothing Then
-        Set m_parent = New CultureInfo: m_parent.New_ &H7F
-    End If
+    If m_parent Is Nothing Then Set m_parent = New CultureInfo: m_parent.NewN LocaleInfo(LOCALE_SPARENT)
     Set Parent = m_parent
 End Property
 
@@ -360,7 +377,7 @@ Public Property Get LCID() As Long
     LCID = m_LCID
 End Property
 Public Function LCID_ToHex() As String
-    Dim sH As String: sH = Hex$(LCID)
+    Dim sH As String: sH = Hex$(m_LCID)
     'sH = String$(4 - Len(sH), "0") & sH
     LCID_ToHex = "&H" & String$(4 - Len(sH), "0") & sH
 End Function
@@ -553,6 +570,7 @@ End Function
 '        s = s & ci.NumberFormat. & vbCrLf
 '
 '        s = s & ci.OptionalCalendars.Length & vbCrLf
+
 '        s = s & ci.Parent.Name & vbCrLf
 '        s = s & ci.Parent. & vbCrLf
 '

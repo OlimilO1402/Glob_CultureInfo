@@ -1,7 +1,7 @@
 # Glob_CultureInfo  
 ## Lists All CultureInfos And All Infos Of One Culture  
 
-[![GitHub](https://img.shields.io/github/license/OlimilO1402/Glob_CultureInfo?style=plastic)](https://github.com/OlimilO1402/Glob_CultureInfo/blob/master/LICENSE)
+[![GitHub](https://img.shields.io/github/license/OlimilO1402/Glob_CultureInfo?style=plastic)](https://github.com/OlimilO1402/Glob_CultureInfo/blob/main/LICENSE)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/OlimilO1402/Glob_CultureInfo?style=plastic)](https://github.com/OlimilO1402/Glob_CultureInfo/releases/latest)
 [![Github All Releases](https://img.shields.io/github/downloads/OlimilO1402/Glob_CultureInfo/total.svg)](https://github.com/OlimilO1402/Glob_CultureInfo/releases/download/v2023.3.12/LCIDCultureInfo_v2023.3.12.zip)
 ![GitHub followers](https://img.shields.io/github/followers/OlimilO1402?style=social)
