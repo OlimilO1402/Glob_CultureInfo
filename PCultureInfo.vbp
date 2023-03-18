@@ -5,6 +5,7 @@ Class=CultureInfo; Classes\CultureInfo.cls
 Module=MNew; Modules\MNew.bas
 Module=MString; ..\Sys_Strings\Modules\MString.bas
 Module=MPtr; ..\Ptr_Pointers\Modules\MPtr.bas
+Module=MLocale; Modules\MLocale.bas
 ResFile32="Resources\MyRes.res"
 IconForm="FMain"
 Startup="FMain"

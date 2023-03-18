@@ -6,7 +6,7 @@ Public Function CultureInfo(ByVal aLCID As Long) As CultureInfo
 End Function
 
 Public Function CultureInfoN(ByVal aLcidName As String) As CultureInfo
-    Set CultureInfoN = New CultureInfo: CultureInfoN.New_ aLcidName
+    Set CultureInfoN = New CultureInfo: CultureInfoN.NewN aLcidName
 End Function
 
 

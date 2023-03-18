@@ -19,6 +19,14 @@ Begin VB.Form FMain
    ScaleHeight     =   6420
    ScaleWidth      =   16110
    StartUpPosition =   3  'Windows-Standard
+   Begin VB.CommandButton Command2 
+      Caption         =   "Command2"
+      Height          =   375
+      Left            =   7080
+      TabIndex        =   4
+      Top             =   0
+      Width           =   2055
+   End
    Begin VB.CommandButton Command1 
       Caption         =   "Command1"
       Height          =   375
@@ -88,6 +96,10 @@ Private Sub Command1_Click()
     
 End Sub
 
+Private Sub Command2_Click()
+    MsgBox GetMaxNameLen
+End Sub
+
 Private Sub Form_Load()
     Me.Caption = App.EXEName & " v" & App.Major & "." & App.Minor & "." & App.Revision
 End Sub
@@ -102,7 +114,9 @@ Private Sub Form_Resize()
 End Sub
 
 Private Sub BtnListLCIDString_Click()
-    CreateCultureInfos
+    'CreateCultureInfos
+    'Set m_CultureInfos = MLocale.GetCultureInfos(Mode_EnumSystemLocale, MLocale.LCID_INSTALLED)
+    Set m_CultureInfos = MLocale.GetCultureInfos(Mode_EnumSystemLocaleEx, MLocale.LOCALE_ALL)
     UpdateViewList
 End Sub
 
@@ -139,7 +153,7 @@ End Sub
 Private Sub List1_Click()
     Dim i As Long: i = List1.ListIndex
     'Dim ln As String: ln = ParseLanguageName(List1.List(i))
-    Dim ll As String: ll = ParseLCID(List1.List(i))
+    Dim ll As String: ll = ParseName(List1.List(i))
     'If ln = "????? (?????)" Then Set m_ci = Nothing Else Set m_ci = m_CultureInfos.Item(ln)
     Set m_ci = m_CultureInfos.Item(ll)
     UpdateViewDetails
@@ -147,12 +161,17 @@ End Sub
 
 Private Function ParseLCID(s As String) As String
     Dim sa() As String: sa = Split(s, " | ")
-    ParseLCID = sa(1)
+    ParseLCID = Trim(sa(1))
+End Function
+
+Private Function ParseName(s As String) As String
+    Dim sa() As String: sa = Split(s, " | ")
+    ParseName = Trim(sa(2))
 End Function
 
 Private Function ParseLanguageName(s As String) As String
     Dim sa() As String: sa = Split(s, " | ")
-    ParseLanguageName = sa(3)
+    ParseLanguageName = Trim(sa(3))
 End Function
 
 Sub UpdateViewDetails()
