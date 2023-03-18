@@ -42,6 +42,7 @@ Private m_Locales As Collection
 
 Public Function GetMaxNameLen() As Long
     Dim v, ci As CultureInfo
+    If m_Locales Is Nothing Then Exit Function
     For Each v In m_Locales
         Set ci = v
         GetMaxNameLen = Max(GetMaxNameLen, Len(ci.Name))

@@ -125,6 +125,7 @@ Private Const LOCALE_IGEOID                 As Long = &H5B ' new
 Private Const LOCALE_SNAME                  As Long = &H5C ' new
 Private Const LOCALE_SDURATION              As Long = &H5D ' new
 Private Const LOCALE_SKEYBOARDSTOINSTALL    As Long = &H5E ' new
+'Private Const ?                             As Long = &H5F
 Private Const LOCALE_SSHORTESTDAYNAME1      As Long = &H60 ' new
 Private Const LOCALE_SSHORTESTDAYNAME2      As Long = &H61 ' new
 Private Const LOCALE_SSHORTESTDAYNAME3      As Long = &H62 ' new
@@ -157,6 +158,8 @@ Private Const LOCALE_SMONTHDAY              As Long = &H78 ' new
 Private Const LOCALE_SSHORTTIME             As Long = &H79 ' new
 Private Const LOCALE_SOPENTYPELANGUAGETAG   As Long = &H7A ' new
 Private Const LOCALE_SSORTLOCALE            As Long = &H7B ' new
+Private Const LOCALE_SRELATIVELONGDATE      As Long = &H7C '124
+'Private Const ???                           As Long = &H7D '125
 Private Const LOCALE_SSHORTESTAM            As Long = &H7E ' new
 Private Const LOCALE_SSHORTESTPM            As Long = &H7F ' new
 
@@ -374,11 +377,12 @@ End Function
 
 Friend Function ToInfoStr() As String
     Dim i As Long, s As String
-    For i = 0 To 90
-        s = s & PadRight(ConstToStr(i), 22) & ": " & LocaleInfo(i) & vbCrLf
+    Dim maxlen As Long: maxlen = 28
+    For i = 0 To 127 '90
+        s = s & Format(i, "0000") & "| " & PadRight(ConstToStr(i), maxlen) & ": " & LocaleInfo(i) & vbCrLf
     Next
     For i = 4097 To 4116
-        s = s & PadRight(ConstToStr(i), 22) & ": " & LocaleInfo(i) & vbCrLf
+        s = s & Format(i, "0000") & "| " & PadRight(ConstToStr(i), maxlen) & ": " & LocaleInfo(i) & vbCrLf
     Next
     ToInfoStr = s
 End Function
@@ -583,6 +587,8 @@ Private Function ConstToStr(ByVal ID As Long) As String
     Case LOCALE_SSHORTTIME:             s = "LOCALE_SSHORTTIME"             '&H79 ' new
     Case LOCALE_SOPENTYPELANGUAGETAG:   s = "LOCALE_SOPENTYPELANGUAGETAG"   '&H7A ' new
     Case LOCALE_SSORTLOCALE:            s = "LOCALE_SSORTLOCALE"            '&H7B ' new
+    Case LOCALE_SRELATIVELONGDATE:      s = "LOCALE_SRELATIVELONGDATE"      '&H7C ' new
+    'Case ?:                             s = "?"                            '&H7D ' new
     Case LOCALE_SSHORTESTAM:            s = "LOCALE_SSHORTESTAM"            '&H7E ' new
     Case LOCALE_SSHORTESTPM:            s = "LOCALE_SSHORTESTPM"            '&H7F ' new
     
@@ -693,3 +699,141 @@ End Function
 '        s = s & CultureInfo.InvariantCulture.Name
 '        's = s & CultureInfo.
 
+''NumberFormatInfo
+''NumFmt
+'
+'Private NumFmt_InvariantInfo       As NumberFormatInfo
+'Private m_numberGroupSizes()       As Long '() = Array( 3 )
+'Private m_currencyGroupSizes()     As Long '() = Array( 3 )
+'Private m_percentGroupSizes()      As Long '() = Array( 3 )
+'Private m_positiveSign             As String '= "+"
+'Private m_negativeSign             As String '= "-"
+'Private m_numberDecimalSeparator   As String '= "."
+'Private m_numberGroupSeparator     As String '= ","
+'Private m_currencyGroupSeparator   As String '= ","
+'Private m_currencyDecimalSeparator As String '= "."
+'Private m_currencySymbol           As String '= "¤"
+'Private m_ansiCurrencySymbol       As String
+'Private m_nanSymbol                As String '= "NaN"
+'Private m_positiveInfinitySymbol   As String '= "Infinity";
+'Private m_negativeInfinitySymbol   As String '= "-Infinity";
+'Private m_percentDecimalSeparator  As String '= ".";
+'Private m_percentGroupSeparator    As String '= ",";
+'Private m_percentSymbol            As String '= "%";
+'Private m_perMilleSymbol           As String '= "‰"
+''[OptionalField(VersionAdded = 2)]
+'Private m_nativeDigits() As Strng '() = Array( "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" )
+''[OptionalField(VersionAdded = 1)]
+'Private m_dataItem               As Long
+'Private m_numberDecimalDigits      As Long ' = 2
+'Private m_currencyDecimalDigits    As Long ' = 2
+'Private m_CurrencyPositivePattern  As Long
+'Private m_CurrencyNegativePattern  As Long
+'Private m_numberNegativePattern    As Long ' = 1
+'Private m_PercentPositivePattern   As Long
+'Private m_PercentNegativePattern   As Long
+'Private m_percentDecimalDigits     As Long ' = 2
+'Private m_isReadOnly               As Boolean
+'
+'''[OptionalField(VersionAdded = 2)]
+'''internal int digitSubstitution = 1
+'''[OptionalField(VersionAdded = 1)]
+'''internal bool m_useUserOverride
+'''[OptionalField(VersionAdded = 2)]
+'''internal bool m_isInvariant
+'''[OptionalField(VersionAdded = 1)]
+'''internal bool validForParseAsNumber = true
+'''[OptionalField(VersionAdded = 1)]
+'''internal bool validForParseAsCurrency = true;
+'''private const NumberStyles InvalidNumberStyles = ~(NumberStyles.Any | NumberStyles.AllowHexSpecifier);
+''
+'Public Property Get NumFmt_InvariantInfo() As NumberFormatInfo
+'    Set NumFmt_InvariantInfo = NumFmt_InvariantInfo
+'End Property
+''Public Property Get NumFmt_CurrentInfo() As NumberFormatInfo
+''
+''End Property
+'Public Property Get NumFmt_CurrencyDecimalDigits() As Long
+'    NumFmt_CurrencyDecimalDigits = m_currencyDecimalDigits
+'End Property
+'Public Property Get NumFmt_CurrencyDecimalSeparator() As String
+'    NumFmt_CurrencyDecimalSeparator = m_currencyDecimalSeparator
+'End Property
+'Public Property Get NumFmt_IsReadOnly() As Boolean
+'    NumFmt_IsReadOnly = m_isReadOnly
+'End Property
+'Public Property Get NumFmt_CurrencyGroupSizes() As Long()
+'    NumFmt_CurrencyGroupSizes = m_currencyGroupSizes '()
+'End Property
+'Public Property Get NumFmt_NumberGroupSizes() As Long()
+'    NumFmt_NumberGroupSizes = m_numberGroupSizes '()
+'End Property
+'Public Property Get NumFmt_PercentGroupSizes() As Long()
+'    NumFmt_PercentGroupSizes = m_percentGroupSizes '()
+'End Property
+'Public Property Get NumFmt_CurrencyGroupSeparator() As String
+'    NumFmt_CurrencyGroupSeparator = m_currencyGroupSeparator
+'End Property
+'Public Property Get NumFmt_CurrencySymbol() As String
+'    NumFmt_CurrencySymbol = m_currencySymbol
+'End Property
+'Public Property Get NumFmt_NaNSymbol() As String
+'    NumFmt_NaNSymbol = m_nanSymbol
+'End Property
+'Public Property Get NumFmt_CurrencyNegativePattern() As Long
+'    NumFmt_CurrencyNegativePattern = m_CurrencyNegativePattern
+'End Property
+'Public Property Get NumFmt_NumberNegativePattern() As Long
+'    NumFmt_NumberNegativePattern = m_numberNegativePattern
+'End Property
+'Public Property Get NumFmt_PercentPositivePattern() As Long
+'    NumFmt_PercentPositivePattern = m_PercentPositivePattern
+'End Property
+'Public Property Get NumFmt_PercentNegativePattern() As Long
+'    NumFmt_PercentNegativePattern = m_PercentNegativePattern
+'End Property
+'Public Property Get NumFmt_NegativeInfinitySymbol() As String
+'    NumFmt_NegativeInfinitySymbol = m_negativeInfinitySymbol
+'End Property
+'Public Property Get NumFmt_NegativeSign() As String
+'    NumFmt_NegativeSign = m_negativeSign
+'End Property
+'Public Property Get NumFmt_NumberDecimalDigits() As Long
+'    NumFmt_NumberDecimalDigits = m_numberDecimalDigits
+'End Property
+'Public Property Get NumFmt_NumberDecimalSeparator() As String
+'    NumFmt_NumberDecimalSeparator = m_numberDecimalSeparator
+'End Property
+'Public Property Get NumFmt_NumberGroupSeparator() As String
+'    NumFmt_NumberGroupSeparator = m_numberGroupSeparator
+'End Property
+'Public Property Get NumFmt_CurrencyPositivePattern() As Long
+'    NumFmt_CurrencyPositivePattern = m_CurrencyPositivePattern
+'End Property
+'Public Property Get NumFmt_PositiveInfinitySymbol() As String
+'    NumFmt_PositiveInfinitySymbol = m_positiveInfinitySymbol
+'End Property
+'Public Property Get NumFmt_PositiveSign() As String
+'    NumFmt_PositiveSign = m_positiveSign
+'End Property
+'Public Property Get NumFmt_PercentDecimalDigits() As Long
+'    NumFmt_PercentDecimalDigits = m_percentDecimalDigits
+'End Property
+'Public Property Get NumFmt_PercentDecimalSeparator() As String
+'    NumFmt_PercentDecimalSeparator = m_percentDecimalSeparator
+'End Property
+'Public Property Get NumFmt_PercentGroupSeparator() As String
+'    NumFmt_PercentGroupSeparator = m_percentGroupSeparator
+'End Property
+'Public Property Get NumFmt_PercentSymbol() As String
+'    NumFmt_PercentSymbol = m_percentSymbol
+'End Property
+'Public Property Get NumFmt_PerMilleSymbol() As String
+'    NumFmt_PerMilleSymbol = m_perMilleSymbol
+'End Property
+'Public Property Get NumFmt_NativeDigits() As String()
+'    NumFmt_NativeDigits = m_nativeDigits '()
+'End Property
+''Public Property Get NumFmt_DigitSubstitution() As DigitShapes
+''    '
+''End Property

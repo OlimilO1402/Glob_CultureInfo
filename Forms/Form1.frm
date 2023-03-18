@@ -83,7 +83,7 @@ Private m_ci As CultureInfo
 'Private m_at As CultureInfo
 
 Private Sub Command1_Click()
-    
+    If m_ci Is Nothing Then Set m_ci = New CultureInfo
     Dim ciud As CultureInfo: Set ciud = m_ci.UserDefaultCulture
     Dim cidt As CultureInfo: Set cidt = m_ci.DefaultThreadCurrentCulture
     Dim ciiv As CultureInfo: Set ciiv = m_ci.InvariantCulture
@@ -105,12 +105,12 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub Form_Resize()
-    Dim l As Single, T As Single, W As Single, H As Single
-    l = List1.Left: T = List1.Top: W = List1.Width
+    Dim L As Single, T As Single, W As Single, H As Single
+    L = List1.Left: T = List1.Top: W = List1.Width
     H = Me.ScaleHeight - T
-    If W > 0 And H > 0 Then List1.Move l, T, W, H
-    l = Text1.Left: W = Me.ScaleWidth - l
-    If W > 0 And H > 0 Then Text1.Move l, T, W, H
+    If W > 0 And H > 0 Then List1.Move L, T, W, H
+    L = Text1.Left: W = Me.ScaleWidth - L
+    If W > 0 And H > 0 Then Text1.Move L, T, W, H
 End Sub
 
 Private Sub BtnListLCIDString_Click()

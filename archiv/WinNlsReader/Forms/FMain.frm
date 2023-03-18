@@ -95,6 +95,7 @@ Private m_PFN As PathFileName
 Private m_WinNlsh As ConstsWinNlsh
 
 Private Sub Form_Load()
+    Me.Caption = App.EXEName & " v" & App.Major & "." & App.Minor & "." & App.Revision
     'Set m_PFN = MNew.PathFileName("C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Include\WinNls.h")
     Set m_PFN = MNew.PathFileName("C:\Program Files\Microsoft Visual Studio\2022\Preview\SDK\ScopeCppSDK\vc15\SDK\include\um\WinNls.h")
 End Sub
@@ -113,6 +114,7 @@ End Sub
 
 Sub UpdateView()
     m_WinNlsh.ToLB List1
+    Label1.Caption = m_WinNlsh.Constants.Count
 End Sub
 
 Private Sub List1_DblClick()
@@ -128,6 +130,14 @@ Private Sub BtnReadWinNlsh_Click()
 End Sub
 
 Private Sub BtnFilterLocale_Click()
+    If m_WinNlsh Is Nothing Then
+        BtnReadWinNlsh_Click
+    End If
+    If m_WinNlsh Is Nothing Then
+        MsgBox "No data maybe could not read winnls.h"
+        Exit Sub
+    End If
+
     Dim flt As String: flt = "LOCALE_"
     flt = InputBox("Filter every string starting with: ", "Filter", flt)
     If Len(flt) = 0 Then Exit Sub
@@ -156,7 +166,6 @@ Private Sub BtnGetConsts_Click()
     Next
     Text1.Text = s
 End Sub
-
 
 Private Sub BtnCopyNamesToTextBox_Click()
 Try: On Error GoTo Catch
