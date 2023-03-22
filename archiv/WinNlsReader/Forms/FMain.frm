@@ -9,6 +9,22 @@ Begin VB.Form FMain
    ScaleHeight     =   12660
    ScaleWidth      =   20385
    StartUpPosition =   3  'Windows-Standard
+   Begin VB.CommandButton BtnSortByName 
+      Caption         =   "Sort By Name"
+      Height          =   375
+      Left            =   11640
+      TabIndex        =   8
+      Top             =   0
+      Width           =   1575
+   End
+   Begin VB.CommandButton BtnSortByValue 
+      Caption         =   "Sort By Value"
+      Height          =   375
+      Left            =   9960
+      TabIndex        =   7
+      Top             =   0
+      Width           =   1575
+   End
    Begin VB.CommandButton BtnCopyNamesToTextBox 
       Caption         =   "Copy Names to TextBox >"
       Height          =   375
@@ -93,6 +109,15 @@ Attribute VB_Exposed = False
 Option Explicit
 Private m_PFN As PathFileName
 Private m_WinNlsh As ConstsWinNlsh
+
+Private Sub BtnSortByValue_Click()
+    m_WinNlsh.ConstsSortByValue
+End Sub
+
+Private Sub BtnSortByName_Click()
+    m_WinNlsh.ConstsSortByName
+End Sub
+
 
 Private Sub Form_Load()
     Me.Caption = App.EXEName & " v" & App.Major & "." & App.Minor & "." & App.Revision
@@ -185,3 +210,12 @@ Try: On Error GoTo Catch
 Catch:
 End Sub
 
+Private Sub Text1_KeyPress(KeyAscii As Integer)
+    If KeyAscii = 1 Then KeyAscii = 0
+End Sub
+Private Sub Text1_KeyUp(KeyCode As Integer, Shift As Integer)
+    If (KeyCode = AscW("A")) And (Shift = VBRUN.ShiftConstants.vbCtrlMask) Then
+        Text1.SelStart = 0
+        Text1.SelLength = Len(Text1.Text)
+    End If
+End Sub

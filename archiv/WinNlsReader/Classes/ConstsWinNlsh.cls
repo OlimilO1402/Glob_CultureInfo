@@ -81,6 +81,26 @@ Public Property Get Constants() As List 'Of CConstant
     Set Constants = m_Constants
 End Property
 
+Public Sub ConstsSortByValue()
+    m_Constants.Sort Me, "CompareByValue"
+End Sub
+
+Public Function CompareByValue(obj1 As CConstant, obj2 As CConstant) As Long
+    If obj1.Value > obj2.Value Then
+        CompareByValue = 1
+    ElseIf obj1.Value < obj2.Value Then
+        CompareByValue = -1
+    End If
+End Function
+
+Public Sub ConstsSortByName()
+    m_Constants.Sort Me, "CompareByName"
+End Sub
+
+Public Function CompareByName(obj1 As CConstant, obj2 As CConstant) As Long
+
+End Function
+
 Public Sub ToLB(aLBCB) ' As ListBox)
     Dim mx As Long: mx = GetMaxNameLen
     aLBCB.Clear

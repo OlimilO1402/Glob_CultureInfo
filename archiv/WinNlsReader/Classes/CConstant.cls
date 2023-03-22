@@ -14,7 +14,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private m_Name  As String
-Private m_Value As String
+Private m_Value As Variant 'maybe string or numeric hex or decimal
 Private m_Comm  As String
 
 Friend Sub New_(ByVal aName As String, ByVal aValue As String, ByVal aComment As String)
@@ -27,11 +27,17 @@ Public Property Get Key() As String
 End Property
 
 Public Property Get Value() As String
-    Value = m_Value
+    Value = CStr(m_Value)
 End Property
 
+Public Property Get IsHex() As Boolean
+    IsHex = IsCHex Or IsVBHex
+End Property
 Public Property Get IsCHex() As Boolean
     IsCHex = MString.StartsWith(CStr(m_Value), "0x")
+End Property
+Public Property Get IsVBHex() As Boolean
+    IsCHex = MString.StartsWith(CStr(m_Value), "&H")
 End Property
 
 Public Property Get TryGetValueAsLong(aValue As Long) As Boolean
@@ -59,3 +65,6 @@ Friend Function ToStr(Optional ByVal NameLen As Long, Optional ByVal sep As Stri
     ToStr = PadRight(m_Name, NameLen) & sep & sv
 End Function
 
+Public Function Compare(other As CConstant) As Long
+    
+End Function
