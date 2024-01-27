@@ -182,6 +182,7 @@ Private Const LOCALE_SENGCURRNAME           As Long = &H1007 ' new
 Private Const LOCALE_SNATIVECURRNAME        As Long = &H1008 ' new
 Private Const LOCALE_ICALENDARTYPE          As Long = &H1009 ' new
 Private Const LOCALE_IPAPERSIZE             As Long = &H100A ' new
+
 Private Const LOCALE_INVARIANT              As Long = &H100B ' new
 Private Const LOCALE_IOPTIONALCALENDAR      As Long = &H100B ' new
 Private Const LOCALE_IFIRSTDAYOFWEEK        As Long = &H100C ' new
@@ -202,15 +203,44 @@ Private Const LOCALE_RETURN_NUMBER          As Long = &H20000000
 Private Const LOCALE_USE_CP_ACP             As Long = &H40000000
 Private Const LOCALE_NOUSEROVERRIDE         As Long = &H80000000
 
-Private Type NUMBERFMT
-    NumDigits     As Long    ' number of decimal digits
-    LeadingZero   As Long    ' if leading zero decimal fields
-    Grouping      As Long    ' group size left of decimal
-    lpDecimalSep  As String  ' ptr to decimal separator string
-    lpThousandSep As String  ' ptr to thousand separator string
-    NegativeOrder As Long    ' negative number ordering
+Private Const SORT_CHINESE_BIG5           As Long = &H0 'Chinese BIG5 order 'Default sort for Simplified Chinese locales 'Use with zh-TW, zh-HK, or zh-MO
+Private Const SORT_CHINESE_PRCP           As Long = &H0 'PRC Chinese phonetic order 'Default sort for Traditional Chinese locales. 'Use with zn-CN or zh-SG
+Private Const SORT_DEFAULT                As Long = &H0 'Default sort order
+Private Const SORT_GEORGIAN_TRADITIONAL   As Long = &H0 'Georgian traditional order 'Default sort for Georgian, use with ka-GE
+Private Const SORT_HUNGARIAN_DEFAULT      As Long = &H0 'Hungarian default order 'Default sort for Hungarian, use with hu-HU
+Private Const SORT_JAPANESE_XJIS          As Long = &H0 'Japanese XJIS order 'Use with ja-JP
+Private Const SORT_KOREAN_KSC             As Long = &H0 'Korean KSC order Default sort for Korean, use with ko-KR
+Private Const SORT_CHINESE_UNICODE        As Long = &H1 'Chinese Unicode order<4> 'Do not use, deprecated
+Private Const SORT_GEORGIAN_MODERN        As Long = &H1 'Georgian modern order 'Use with ka-GE, resolves to ka-GE_modern
+Private Const SORT_GERMAN_PHONE_BOOK      As Long = &H1 'German phone book order 'Use with de-DE, resolves to de-DE_phoneb
+Private Const SORT_HUNGARIAN_TECHNICAL    As Long = &H1 'Hungarian technical order 'Use with hu-HU, resolves to hu-HU_technl
+Private Const SORT_JAPANESE_UNICODE       As Long = &H1 'Japanese Unicode order<5> 'Do not use, deprecated
+Private Const SORT_KOREAN_UNICODE         As Long = &H1 'Korean Unicode order<6> 'Do not use, deprecated
+Private Const SORT_CHINESE_PRC            As Long = &H2 'PRC Chinese stroke count order 'Use with zh-CN, resolves to zh-CN_stroke 'Use with zh-SG, resolves to zh-SG_stroke
+Private Const SORT_CHINESE_BOPOMOFO       As Long = &H3 'Traditional Chinese Bopomofo order 'Use with zh-TW, resolves to zh-TW_pronun
+Private Const SORT_CHINESE_RADICALSTROKE  As Long = &H4 'Chinese radical/stroke order<7> 'Use with zh-HK, resolves to zh-HK_radstr 'Use with zh-MO, resolves to zh-MO_radstr 'Use with zh-TW, resolves to zh-TW_radstr
+Private Const SORT_JAPANESE_RADICALSTROKE As Long = &H4 'Japanese radical/stroke sort order 'Use with ja-JP, resolves to ja-JP_radstr
+
+Private Type NUMBERFMTW
+    NumDigits        As Long    ' number of decimal digits
+    LeadingZero      As Long    ' if leading zero decimal fields
+    Grouping         As Long    ' group size left of decimal
+    lpDecimalSep     As LongPtr 'String  ' ptr to decimal separator string
+    lpThousandSep    As LongPtr 'String  ' ptr to thousand separator string
+    NegativeOrder    As Long    ' negative number ordering
+    PositiveOrder    As Long
+    lpCurrencySymbol As LongPtr 'String
 End Type
 
+'typedef struct _numberfmtW {
+'  UINT   NumDigits;
+'  UINT   LeadingZero;
+'  UINT   Grouping;
+'  LPWSTR lpDecimalSep;
+'  LPWSTR lpThousandSep;
+'  UINT   NegativeOrder;
+'} NUMBERFMTW, *LPNUMBERFMTW;
+'
 'Public Type NumberFormat
 '    NumDigits     As Long   ' number of decimal digits
 '    LeadingZero   As Long   ' if leading zero decimal fields
@@ -242,11 +272,34 @@ Private Type CURRENCYFMT
     lpCurrencySymbol As String ' ptr to currency symbol string
 End Type
 
-Private Declare Function LcidToRfc1766W Lib "mlang" (ByVal LocaleID As Long, pSzRfc1766 As Any, ByVal nChar As Long) As Long
+'MLang.dll
+'https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa741205(v=vs.85)
+Private Declare Function LcidToRfc1766W Lib "MLang" (ByVal LocaleID As Long, pSzRfc1766 As Any, ByVal nChar As Long) As Long
+
+'https://learn.microsoft.com/de-de/windows/win32/api/winnls/nf-winnls-lcidtolocalename
+Private Declare Function LCIDToLocaleName Lib "kernel32" (ByVal LocaleID As Long, lpName As Any, ByVal cchName As Long, ByVal dwFlags As Long) As Long
+'int LCIDToLocaleName(
+'  [in]            LCID   Locale,
+'  [out, optional] LPWSTR lpName,
+'  [in]            int    cchName,
+'  [in]            DWORD  dwFlags
+');
+'LocaleID: lcid or LOCALE_INVARIANT, LOCALE_SYSTEM_DEFAULT, LOCALE_USER_DEFAULT
+'lpName: pointer to string, or LOCALE_NAME_INVARIANT, LOCALE_NAME_SYSTEM_DEFAULT, LOCALE_NAME_USER_DEFAULT
+
 'https://learn.microsoft.com/de-de/windows/win32/api/winnls/nf-winnls-localenametolcid
 
-Private Declare Function Rfc1766ToLcidW Lib "mlang" (ByRef pLocaleID_out As Any, pSzRfc1766 As Any) As Long
+
+'https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa741208(v=vs.85)
+Private Declare Function Rfc1766ToLcidW Lib "MLang" (ByRef pLocaleID_out As Any, pSzRfc1766 As Any) As Long
+
+'https://learn.microsoft.com/en-us/windows/win32/api/winver/nf-winver-verlanguagenamew
 Private Declare Function VerLanguageNameW Lib "kernel32" (ByVal LocaleID As Long, ByRef pSzLang_out As Any, ByVal nSize As Long) As Long
+'DWORD VerLanguageNameW(
+'  [in]  DWORD  wLang,
+'  [out] LPWSTR szLang,
+'  [in]  DWORD  cchLang
+');
 
 Private Declare Function GetSystemDefaultLCID Lib "kernel32" () As Long
 Private Declare Function GetSystemDefaultLangID Lib "kernel32" () As Long
@@ -262,7 +315,20 @@ Private Declare Function GetLocaleInfoEx Lib "kernel32" (ByVal lpLocaleName As L
 
 Private Declare Function GetNumberFormatW Lib "kernel32" (ByVal Locale As Long, ByVal dwFlags As Long, ByVal lpValue As LongPtr, lpFormat As LongPtr, ByVal lpNumberStr As LongPtr, ByVal cchNumber As Long) As Long
 Private Declare Function GetCalendarInfoW Lib "kernel32" (ByVal Locale As Long, ByVal Calendar As Long, ByVal CalType As Long, ByVal lpCalData_out As LongPtr, ByVal cchData As Long, ByVal lpValue As LongPtr) As Long
-Private Declare Function GetCurrencyFormatW Lib "kernel32" (ByVal Locale As Long, ByVal dwFlags As Long, ByVal lpValue As LongPtr, ByRef lpFormat As CURRENCYFMT, ByVal lpCurrencyStr As String, ByVal cchCurrency As Long) As Long
+
+'https://learn.microsoft.com/de-de/windows/win32/api/winnls/nf-winnls-getcurrencyformatw
+Private Declare Function GetCurrencyFormatW Lib "kernel32" (ByVal Locale As Long, ByVal dwFlags As Long, ByVal lpValue As LongPtr, ByRef lpFormat As Any, ByVal lpCurrencyStr As LongPtr, ByVal cchCurrency As Long) As Long
+
+'https://learn.microsoft.com/de-de/windows/win32/api/winnls/nf-winnls-getcurrencyformatex
+Private Declare Function GetCurrencyFormatEx Lib "kernel32" (ByVal lpLocaleName As LongPtr, ByVal dwFlags As Long, ByVal lpValue As LongPtr, ByRef lpFormat As Any, lpCurrencyStr As LongPtr, ByVal cchCurrency As Long) As Long
+'int GetCurrencyFormatEx(
+'  [in, optional]  LPCWSTR            lpLocaleName,
+'  [in]            DWORD              dwFlags,
+'  [in]            LPCWSTR            lpValue,
+'  [in, optional]  const CURRENCYFMTW *lpFormat,
+'  [out, optional] LPWSTR             lpCurrencyStr,
+'  [in]            int                cchCurrency
+');
 
 Private m_LCID   As Long   'RFC1766 LocaleID  437
 Private m_Name   As String 'RFC1766 String    de-DE
@@ -294,6 +360,7 @@ Private m_DTF_AllDateTimePatterns()     As String
 
 Private m_NFT_CurcyDecDigits            As String
 Private m_NFT_CurcyDecSeps              As String
+Private m_CurrencyFmt                   As CURRENCYFMT
 
 
 Friend Sub New_(ByVal aLCID As Long)
@@ -317,7 +384,7 @@ Friend Sub NewN(ByVal aLcidName As String)
 End Sub
 
 Friend Sub NewC(other As CultureInfo)
-    m_LCID = other.LCID
+    m_LCID = other.lcid
     m_Name = other.Name
     m_LgName = other.LanguageName
 End Sub
@@ -342,33 +409,48 @@ Public Property Get LanguageName() As String
     LanguageName = m_LgName
 End Property
 
+' v ############################## v '    MLang    ' v ############################## v '
 Private Function LCID_ToRfc1766(ByVal aLCID As Long) As String
-    Dim s As String: s = Space$(6) 'String$(6, vbNullChar)
-    Dim hr As Long: hr = LcidToRfc1766W(aLCID, ByVal StrPtr(s), 6)
-    If hr <> 0 Then
+    Dim l As Long: l = 32
+    Dim s As String: s = Space$(l) 'String$(6, vbNullChar)
+    Dim hr As Long
+    Dim bMLang As Boolean: bMLang = True
+    If bMLang Then
+        hr = LcidToRfc1766W(aLCID, ByVal StrPtr(s), 6)
+        If hr <> 0 Then
         ' Msgbox "Fehler"
-        Exit Function
-    End If
-    Dim i As Long
-    For i = 0 To 1
-        If Len(s) > 3 + i Then
-            Mid$(s, 4 + i, 1) = UCase$(Mid$(s, 4 + i, 1))
+            Exit Function
         End If
-    Next
-    LCID_ToRfc1766 = Trim0(s)
+        Dim i As Long
+        For i = 0 To 1
+            If Len(s) > 3 + i Then
+                Mid$(s, 4 + i, 1) = UCase$(Mid$(s, 4 + i, 1))
+            End If
+        Next
+        s = Trim0(s)
+    Else
+        hr = LCIDToLocaleName(aLCID, ByVal StrPtr(s), l, 0)
+        If hr = 0 Then
+            ' Msgbox "Fehler"
+            Exit Function
+        End If
+        s = Left(s, hr - 1)
+    End If
+    LCID_ToRfc1766 = s
 End Function
 
 Private Function LCID_ToLanguageName(ByVal aLCID As Long) As String
-    Dim L As Long:   L = 256
-    Dim s As String: s = String$(L, vbNullChar)
-    L = VerLanguageNameW(aLCID, ByVal StrPtr(s), L)
-    If L = 0 Then Exit Function
-    LCID_ToLanguageName = Trim0(Left$(s, L))
+    Dim l As Long:   l = 256
+    Dim s As String: s = String$(l, vbNullChar)
+    l = VerLanguageNameW(aLCID, ByVal StrPtr(s), l)
+    If l = 0 Then Exit Function
+    LCID_ToLanguageName = Trim0(Left$(s, l))
 End Function
 
 Private Function Rfc1766String_ToLCID(ByVal sRfc1766 As String) As Long
     Dim hr As Long: hr = Rfc1766ToLcidW(Rfc1766String_ToLCID, ByVal StrPtr(sRfc1766))
 End Function
+' ^ ############################## ^ '    MLang    ' ^ ############################## ^ '
 
 Friend Function ToStr() As String
     'ToStr = LCID_ToHex & " = " & m_Name & "; Language: " & m_LgName
@@ -392,6 +474,19 @@ Private Function Trim0(s As String) As String
     Dim pos As Long: pos = InStr(1, Trim0, vbNullChar)
     If pos = 0 Then Exit Function
     Trim0 = Left$(Trim0, pos - 1)
+End Function
+
+'                              1                               2                             3    |
+'0  1  2  3  4  5  6  7  8  9  0 | 1  2  3  4  5 | 6  7  8  9  0  1  2  3  4  5  6  7  8  9  0  1 |
+'           Reserved             |    Sort ID    |                   Language ID                  |
+'
+Private Function MAKELCID(ByVal lgid As Long, ByVal srtid As Long) As Long
+    '
+End Function
+
+Private Function MAKELANGID(ByVal p As Long, ByVal s As Long) As Long
+    'p: value in the range between 0x03FF - 0x0200
+    's: value in the range between   0x20 -   0x3F
 End Function
 
 'Static Properties
@@ -434,8 +529,8 @@ Public Property Get Parent() As CultureInfo
     Set Parent = m_parent
 End Property
 
-Public Property Get LCID() As Long
-    LCID = m_LCID
+Public Property Get lcid() As Long
+    lcid = m_LCID
 End Property
 Public Function LCID_ToHex() As String
     Dim sH As String: sH = Hex$(m_LCID)

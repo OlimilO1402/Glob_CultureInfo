@@ -85,3 +85,16 @@ Private Function CALLBACK_EnumLocalesProcEx(ByVal unnamedParam1 As LongPtr, ByVa
     CALLBACK_EnumLocalesProcEx = 1
 End Function
 
+Public Function LCIDEnumToStr() As String
+    If m_Locales Is Nothing Then Exit Function
+    If m_Locales.Count = 0 Then Exit Function
+    Dim s As String
+    s = "Public Enum ELCID" & vbCrLf
+    Dim v, c As CultureInfo
+    For Each v In m_Locales
+        Set c = v
+        s = s & "    elcid_" & Replace(c.Name, "-", "_") & " = " & c.LCID_ToHex & vbCrLf
+        
+    Next
+    LCIDEnumToStr = s & "End Enum" & vbCrLf
+End Function
