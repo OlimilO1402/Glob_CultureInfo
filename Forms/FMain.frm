@@ -4,7 +4,7 @@ Begin VB.Form FMain
    ClientHeight    =   6420
    ClientLeft      =   120
    ClientTop       =   465
-   ClientWidth     =   16110
+   ClientWidth     =   23550
    BeginProperty Font 
       Name            =   "Segoe UI"
       Size            =   9.75
@@ -17,7 +17,7 @@ Begin VB.Form FMain
    Icon            =   "FMain.frx":0000
    LinkTopic       =   "Form1"
    ScaleHeight     =   6420
-   ScaleWidth      =   16110
+   ScaleWidth      =   23550
    StartUpPosition =   3  'Windows-Standard
    Begin VB.CommandButton Command1 
       Caption         =   "Command1"
@@ -62,12 +62,12 @@ Begin VB.Form FMain
          Strikethrough   =   0   'False
       EndProperty
       Height          =   4815
-      Left            =   8040
+      Left            =   11760
       MultiLine       =   -1  'True
       ScrollBars      =   3  'Beides
       TabIndex        =   2
       Top             =   360
-      Width           =   8055
+      Width           =   11775
    End
    Begin VB.CommandButton BtnListLCIDString 
       Caption         =   "List All Languages"
@@ -93,7 +93,7 @@ Begin VB.Form FMain
       List            =   "FMain.frx":1784
       TabIndex        =   0
       Top             =   360
-      Width           =   8055
+      Width           =   11775
    End
 End
 Attribute VB_Name = "FMain"
@@ -124,23 +124,32 @@ End Sub
 Private Sub BtnTestELCID_Click()
     
     Dim lcid As Long
-    Dim s As String
     
-    lcid = &H7
-    s = MLang.LCID_ToRfc1766(lcid)
-    MsgBox s 'de-DE
+    'lcid = MLang.MAKELANGID(7, &H400)
     
-    lcid = &H407
-    s = MLang.LCID_ToRfc1766(lcid)
-    MsgBox s 'de
+    'MsgBox Hex(lcid)
     
-    lcid = &H9
-    s = MLang.LCID_ToRfc1766(lcid)
-    MsgBox s 'en
+    'lcid = MLang.MAKELCID(lcid, 1)
+    'MsgBox Hex(lcid)
     
-    lcid = &H409
-    s = MLang.LCID_ToRfc1766(lcid)
-    MsgBox s 'en-US
+    
+    'Dim s As String
+    
+    'lcid = &H7
+    's = MLang.LCID_ToLocaleName(lcid)
+    'MsgBox s 'de-DE
+    
+    'lcid = &H10407
+    's = MLang.LCID_ToLocaleName(lcid)
+    'MsgBox s 'de
+    
+    'lcid = &H9
+    's = MLang.LCID_ToLocaleName(lcid)
+    'MsgBox s 'en
+    
+    'lcid = &H409
+    's = MLang.LCID_ToLocaleName(lcid)
+    'MsgBox s 'en-US
     
     
 'VB.net-code:
@@ -173,13 +182,19 @@ Private Sub BtnTestELCID_Click()
 '    Set ci_de = MNew.CultureInfo(&H407)
 '    MsgBox ci_de.Name
 '
-'    Dim ci_en As CultureInfo
-'
-'    Set ci_en = MNew.CultureInfo(&H9)
-'    MsgBox ci_en.Name
-'
-'    Set ci_en = MNew.CultureInfo(&H409)
-'    MsgBox ci_en.Name
+    Dim ci_en As CultureInfo
+
+    Set ci_en = MNew.CultureInfo(&H9)
+    MsgBox ci_en.Name
+
+    Set ci_en = MNew.CultureInfo(&H409)
+    
+    MsgBox ci_en.Name
+    MsgBox ci_en.ToStr
+    
+    MsgBox ci_en.DisplayName
+    MsgBox ci_en.EnglishName
+    
     
     
 End Sub

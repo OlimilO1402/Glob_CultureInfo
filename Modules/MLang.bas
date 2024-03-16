@@ -1,20 +1,29 @@
 Attribute VB_Name = "MLang"
 Option Explicit
 
+Private Const LOCALE_NAME_MAX_LENGTH        As Long = 85
+Private Const LOCALE_ALLOW_NEUTRAL_NAMES    As Long = &H8000000
+
 'https://learn.microsoft.com/de-de/openspecs/windows_protocols/ms-lcid/70feba9f-294e-491e-b6eb-56532684c37f
 
 'MLang.dll
 'https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa741205(v=vs.85)
-Private Declare Function LcidToRfc1766W Lib "MLang" (ByVal LocaleID As Long, pSzRfc1766 As Any, ByVal nChar As Long) As Long
+'Private Declare Function LcidToRfc1766W Lib "MLang" (ByVal LocaleID As Long, pSzRfc1766 As Any, ByVal nChar As Long) As Long
 
 'https://learn.microsoft.com/de-de/windows/win32/api/winnls/nf-winnls-lcidtolocalename
 Private Declare Function LCIDToLocaleName Lib "kernel32" (ByVal LocaleID As Long, lpName As Any, ByVal cchName As Long, ByVal dwFlags As Long) As Long
 
 'https://learn.microsoft.com/de-de/windows/win32/api/winnls/nf-winnls-localenametolcid
+Private Declare Function LocaleNameToLCID Lib "kernel32" (ByVal lpName As Any, ByVal dwFlags As Long) As Long
+'LCID LocaleNameToLCID(
+'  [in] LPCWSTR lpName,
+'  [in] DWORD   dwFlags
+');
+
 'https://learn.microsoft.com/de-de/windows/win32/intl/national-language-support
 
 'https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa741208(v=vs.85)
-Private Declare Function Rfc1766ToLcidW Lib "MLang" (ByRef pLocaleID_out As Any, pSzRfc1766 As Any) As Long
+'Private Declare Function Rfc1766ToLcidW Lib "MLang" (ByRef pLocaleID_out As Any, pSzRfc1766 As Any) As Long
 
 'https://learn.microsoft.com/en-us/windows/win32/api/winver/nf-winver-verlanguagenamew
 Private Declare Function VerLanguageNameW Lib "kernel32" (ByVal LocaleID As Long, ByRef pSzLang_out As Any, ByVal nSize As Long) As Long
@@ -23,36 +32,15 @@ Private Declare Function VerLanguageNameW Lib "kernel32" (ByVal LocaleID As Long
 '  [out] LPWSTR szLang,
 '  [in]  DWORD  cchLang
 ');
-Private Declare Function lstrlenW Lib "kernel32" (ByVal lpString As Any) As Long
+'Private Declare Function lstrlenW Lib "kernel32" (ByVal lpString As Any) As Long
 
 
-Public Function LCID_ToRfc1766(ByVal aLCID As Long) As String
-    Dim l As Long: l = 32
-    Dim s As String: s = Space$(l) 'String$(6, vbNullChar)
-    Dim hr As Long
-    Dim bMLang As Boolean: bMLang = True
-    If bMLang Then
-        hr = LcidToRfc1766W(aLCID, ByVal StrPtr(s), 6)
-        If hr <> 0 Then
-        ' Msgbox "Fehler"
-            Exit Function
-        End If
-        Dim i As Long
-        For i = 0 To 1
-            If Len(s) > 3 + i Then
-                Mid$(s, 4 + i, 1) = UCase$(Mid$(s, 4 + i, 1))
-            End If
-        Next
-        s = Trim0(s)
-    Else
-        hr = LCIDToLocaleName(aLCID, ByVal StrPtr(s), l, 0)
-        If hr = 0 Then
-            ' Msgbox "Fehler"
-            Exit Function
-        End If
-        s = Left(s, hr - 1)
-    End If
-    LCID_ToRfc1766 = s
+Public Function LCID_ToLocaleName(ByVal aLCID As Long) As String
+    Dim l As Long:   l = LOCALE_NAME_MAX_LENGTH
+    Dim s As String: s = Space$(l)
+    l = LCIDToLocaleName(aLCID, ByVal StrPtr(s), l, LOCALE_ALLOW_NEUTRAL_NAMES)
+    If l = 0 Then Exit Function
+    LCID_ToLocaleName = Left(s, l - 1)
 End Function
 
 Public Function LCID_ToLanguageName(ByVal aLCID As Long) As String
@@ -64,12 +52,25 @@ Public Function LCID_ToLanguageName(ByVal aLCID As Long) As String
     LCID_ToLanguageName = Trim0(Left$(s, l))
 End Function
 
-Private Function Trim0(ByVal s As String) As String
-    Trim0 = VBA.Strings.Trim$(Left$(s, lstrlenW(ByVal StrPtr(s))))
+Public Function LocaleName_ToLCID(ByVal sLocaleName As String) As Long
+    LocaleName_ToLCID = LocaleNameToLCID(StrPtr(sLocaleName), LOCALE_ALLOW_NEUTRAL_NAMES)
 End Function
 
-Public Function Rfc1766String_ToLCID(ByVal sRfc1766 As String) As Long
-    Dim hr As Long: hr = Rfc1766ToLcidW(Rfc1766String_ToLCID, ByVal StrPtr(sRfc1766))
+'                              1                               2                             3    |
+'0  1  2  3  4  5  6  7  8  9  0 | 1  2  3  4  5 | 6  7  8  9  0  1  2  3  4  5  6  7  8  9  0  1 |
+'           Reserved             |    Sort ID    |                   Language ID                  |
+Public Function MAKELCID(ByVal lgid As Long, ByVal srtid As Long) As Long
+    MAKELCID = lgid Or (srtid * 65536) '2^16 = 65536
+End Function
+
+Public Function MAKELANGID(ByVal p As Long, ByVal s As Long) As Long
+    'p: value in the range between 0x03FF - 0x0200
+    's: value in the range between   0x20 -   0x3F
+    MAKELANGID = s Or p
+End Function
+
+Private Function Trim0(ByVal s As String) As String
+    Trim0 = VBA.Strings.Trim$(Left$(s, lstrlenW(ByVal StrPtr(s))))
 End Function
 
 Public Function ListLCIDStrings() As Collection
@@ -119,3 +120,36 @@ Private Function Col_Contains(col As Collection, Key As String) As Boolean
     On Error GoTo 0
 End Function
 
+'
+'static void get_name_record_locale(enum OPENTYPE_PLATFORM_ID platform, USHORT lang_id, WCHAR *locale, USHORT locale_len)
+'{
+'    static const WCHAR enusW[] = {'e','n','-','U','S',0};
+'
+'    switch (platform) {
+'    Case OPENTYPE_PLATFORM_MAC:
+'    {
+'        const char *locale_name = NULL;
+'
+'        if (lang_id > TT_NAME_MAC_LANGID_AZER_ROMAN)
+'            ERR("invalid mac lang id %d\n", lang_id);
+'        else if (!name_mac_langid_to_locale[lang_id][0])
+'            FIXME("failed to map mac lang id %d to locale name\n", lang_id);
+'        Else
+'            locale_name = name_mac_langid_to_locale[lang_id];
+'
+'        if (locale_name)
+'            MultiByteToWideChar(CP_ACP, 0, name_mac_langid_to_locale[lang_id], -1, locale, locale_len);
+'        Else
+'            strcpyW(locale, enusW);
+'        break;
+'    }
+'    Case OPENTYPE_PLATFORM_WIN:
+'        if (!LCIDToLocaleName(MAKELCID(lang_id, SORT_DEFAULT), locale, locale_len, 0)) {
+'            FIXME("failed to get locale name for lcid=0xx\n", MAKELCID(lang_id, SORT_DEFAULT));
+'            strcpyW(locale, enusW);
+'        }
+'        break;
+'default:
+'        FIXME("unknown platform %d\n", platform);
+'    }
+'}

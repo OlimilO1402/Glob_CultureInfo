@@ -25,13 +25,25 @@ Option Explicit
 
 Private Const LOCALE_NEUTRAL                As Long = &H0
 Private Const LOCALE_ILANGUAGE              As Long = &H1
+
 Private Const LOCALE_SLANGUAGE              As Long = &H2
+Private Const LOCALE_SLOCALIZEDDISPLAYNAME  As Long = &H2
+
 Private Const LOCALE_SABBREVLANGNAME        As Long = &H3
-Private Const LOCALE_SNATIVELANGNAME        As Long = &H4
+Private Const LOCALE_SNATIVELANGUAGENAME    As Long = &H4
+
 Private Const LOCALE_ICOUNTRY               As Long = &H5
+Private Const LOCALE_IDIALINGCODE           As Long = &H5
+
 Private Const LOCALE_SCOUNTRY               As Long = &H6
+Private Const LOCALE_SLOCALIZEDCOUNTRYNAME  As Long = &H6
+
 Private Const LOCALE_SABBREVCTRYNAME        As Long = &H7
+Private Const LOCALE_SABBREVCOUNTRYNAME     As Long = &H7
+
 Private Const LOCALE_SNATIVECTRYNAME        As Long = &H8
+Private Const LOCALE_SNATIVECOUNTRYNAME     As Long = &H8
+
 Private Const LOCALE_IDEFAULTLANGUAGE       As Long = &H9
 Private Const LOCALE_IDEFAULTCOUNTRY        As Long = &HA
 Private Const LOCALE_IDEFAULTCODEPAGE       As Long = &HB
@@ -66,8 +78,13 @@ Private Const LOCALE_ICENTURY               As Long = &H24
 Private Const LOCALE_ITLZERO                As Long = &H25
 Private Const LOCALE_IDAYLZERO              As Long = &H26
 Private Const LOCALE_IMONLZERO              As Long = &H27
+
 Private Const LOCALE_S1159                  As Long = &H28
+Private Const LOCALE_SAM                    As Long = &H28
+
 Private Const LOCALE_S2359                  As Long = &H29
+Private Const LOCALE_SPM                    As Long = &H29
+
 Private Const LOCALE_SDAYNAME1              As Long = &H2A
 Private Const LOCALE_SDAYNAME2              As Long = &H2B
 Private Const LOCALE_SDAYNAME3              As Long = &H2C
@@ -173,6 +190,8 @@ Private Const LOCALE_CUSTOM_DEFAULT         As Long = &HC00    '   3072
 Private Const LOCALE_CUSTOM_UNSPECIFIED     As Long = &H1000   '   4096
 
 Private Const LOCALE_SENGLANGUAGE           As Long = &H1001 ' new
+Private Const LOCALE_SENGLISHLANGUAGENAME   As Long = &H1001 ' new
+
 Private Const LOCALE_SENGCOUNTRY            As Long = &H1002 ' new
 Private Const LOCALE_STIMEFORMAT            As Long = &H1003 ' new
 Private Const LOCALE_IDEFAULTANSICODEPAGE   As Long = &H1004 ' new
@@ -203,6 +222,9 @@ Private Const LOCALE_RETURN_NUMBER          As Long = &H20000000
 Private Const LOCALE_USE_CP_ACP             As Long = &H40000000
 Private Const LOCALE_NOUSEROVERRIDE         As Long = &H80000000
 
+Private Const LOCALE_NAME_MAX_LENGTH        As Long = 85
+
+'https://learn.microsoft.com/de-de/windows/win32/intl/sort-order-identifiers
 Private Const SORT_CHINESE_BIG5           As Long = &H0 'Chinese BIG5 order 'Default sort for Simplified Chinese locales 'Use with zh-TW, zh-HK, or zh-MO
 Private Const SORT_CHINESE_PRCP           As Long = &H0 'PRC Chinese phonetic order 'Default sort for Traditional Chinese locales. 'Use with zn-CN or zh-SG
 Private Const SORT_DEFAULT                As Long = &H0 'Default sort order
@@ -274,7 +296,7 @@ End Type
 
 'MLang.dll
 'https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa741205(v=vs.85)
-Private Declare Function LcidToRfc1766W Lib "MLang" (ByVal LocaleID As Long, pSzRfc1766 As Any, ByVal nChar As Long) As Long
+'Private Declare Function LcidToRfc1766W Lib "MLang" (ByVal LocaleID As Long, pSzRfc1766 As Any, ByVal nChar As Long) As Long
 
 'https://learn.microsoft.com/de-de/windows/win32/api/winnls/nf-winnls-lcidtolocalename
 Private Declare Function LCIDToLocaleName Lib "kernel32" (ByVal LocaleID As Long, lpName As Any, ByVal cchName As Long, ByVal dwFlags As Long) As Long
@@ -288,10 +310,15 @@ Private Declare Function LCIDToLocaleName Lib "kernel32" (ByVal LocaleID As Long
 'lpName: pointer to string, or LOCALE_NAME_INVARIANT, LOCALE_NAME_SYSTEM_DEFAULT, LOCALE_NAME_USER_DEFAULT
 
 'https://learn.microsoft.com/de-de/windows/win32/api/winnls/nf-winnls-localenametolcid
+Private Declare Function LocaleNameToLCID Lib "kernel32" (ByVal lpName As Any, ByVal dwFlags As Long) As Long
+'LCID LocaleNameToLCID(
+'  [in] LPCWSTR lpName,
+'  [in] DWORD   dwFlags
+');
 
 
 'https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa741208(v=vs.85)
-Private Declare Function Rfc1766ToLcidW Lib "MLang" (ByRef pLocaleID_out As Any, pSzRfc1766 As Any) As Long
+'Private Declare Function Rfc1766ToLcidW Lib "MLang" (ByRef pLocaleID_out As Any, pSzRfc1766 As Any) As Long
 
 'https://learn.microsoft.com/en-us/windows/win32/api/winver/nf-winver-verlanguagenamew
 Private Declare Function VerLanguageNameW Lib "kernel32" (ByVal LocaleID As Long, ByRef pSzLang_out As Any, ByVal nSize As Long) As Long
@@ -312,6 +339,12 @@ Private Declare Function GetLocaleInfoW Lib "kernel32" (ByVal Locale As Long, By
 
 'https://learn.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getlocaleinfoex
 Private Declare Function GetLocaleInfoEx Lib "kernel32" (ByVal lpLocaleName As LongPtr, ByVal LCType As Long, ByVal lpLCData As LongPtr, ByVal cchData As Long) As Long
+'int GetLocaleInfoEx(
+'  [in, optional]  LPCWSTR lpLocaleName,
+'  [in]            LCTYPE  LCType,
+'  [out, optional] LPWSTR  lpLCData,
+'  [in]            int     cchData
+');
 
 Private Declare Function GetNumberFormatW Lib "kernel32" (ByVal Locale As Long, ByVal dwFlags As Long, ByVal lpValue As LongPtr, lpFormat As LongPtr, ByVal lpNumberStr As LongPtr, ByVal cchNumber As Long) As Long
 Private Declare Function GetCalendarInfoW Lib "kernel32" (ByVal Locale As Long, ByVal Calendar As Long, ByVal CalType As Long, ByVal lpCalData_out As LongPtr, ByVal cchData As Long, ByVal lpValue As LongPtr) As Long
@@ -365,7 +398,7 @@ Private m_CurrencyFmt                   As CURRENCYFMT
 
 Friend Sub New_(ByVal aLCID As Long)
     m_LCID = aLCID
-    m_Name = LCID_ToRfc1766(m_LCID)
+    m_Name = LCID_ToLocaleName(m_LCID)
     m_LgName = LCID_ToLanguageName(m_LCID)
 End Sub
 
@@ -374,13 +407,22 @@ Friend Sub NewN(ByVal aLcidName As String)
     '    Debug.Assert True
     'End If
     m_Name = aLcidName
+    'If m_Name = "de-DE_phoneb" Then
+    'If m_Name = "ar-MR" Then
+    '    Debug.Assert False 'True
+    'End If
     'm_LCID = Rfc1766String_ToLCID(aLcidName)
     m_LCID = CLng("&H" & LocaleInfo(LOCALE_ILANGUAGE))
+    
+    'Dim sortID As Long
+    'sortID = CLng("&H" & LocaleInfo(LOCALE_SLANGUAGE))
+    'm_LCID = MLang.MAKELCID(m_LCID, sortID)
+    
     m_LgName = Trim(LocaleInfo(LOCALE_SLANGUAGE))
     If Len(m_LgName) = 0 Then m_LgName = LCID_ToLanguageName(m_LCID)
     If Len(m_LgName) = 0 Then m_LgName = LocaleInfo(LOCALE_SENGLANGUAGE)
     'erst am Schluss
-    If Len(m_Name) = 0 Then m_Name = LCID_ToRfc1766(m_LCID)
+    If Len(m_Name) = 0 Then m_Name = LCID_ToLocaleName(m_LCID)
 End Sub
 
 Friend Sub NewC(other As CultureInfo)
@@ -394,12 +436,28 @@ Public Function Clone() As CultureInfo
 End Function
 
 Private Function LocaleInfo(ByVal ID As Long) As String
-    Dim Length As Long:   Length = GetLocaleInfoW(m_LCID, ID, 0, 0)
-    Dim Buffer As String: Buffer = Space(Length + 1)
+    'Dim Length As Long:   Length = GetLocaleInfoW(m_LCID, ID, 0, 0)
+    Dim Length As Long:   Length = GetLocaleInfoEx(StrPtr(m_Name), ID, 0, Length)
+    Dim Buffer As String: Buffer = Space(Length + 1) & vbNullChar & vbNullChar
     'Dim Result As Long:   Result = GetLocaleInfoW(m_LCID, ID, StrPtr(Buffer), Length)
     Dim Result As Long:   Result = GetLocaleInfoEx(StrPtr(m_Name), ID, StrPtr(Buffer), Length)
     LocaleInfo = Trim0(Left$(Buffer, Length))
 End Function
+
+'function _GetCountryFlag(): string;
+'Var
+'  Buffer : PChar;
+'  Size : integer;
+'begin
+'  Size := GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SABBREVCTRYNAME, nil, 0);
+'  GetMem(Buffer, Size);
+'  Try
+'    GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SABBREVCTRYNAME, Buffer, Size);
+'    Result := Copy(Buffer,0,2); { return US / use  Result := Buffer to return USA }
+'  finally
+'    FreeMem(Buffer);
+'  end;
+'end;
 
 Private Function IsValid() As Boolean
     IsValid = Len(m_Name)
@@ -410,36 +468,16 @@ Public Property Get LanguageName() As String
 End Property
 
 ' v ############################## v '    MLang    ' v ############################## v '
-Private Function LCID_ToRfc1766(ByVal aLCID As Long) As String
-    Dim l As Long: l = 32
-    Dim s As String: s = Space$(l) 'String$(6, vbNullChar)
-    Dim hr As Long
-    Dim bMLang As Boolean: bMLang = True
-    If bMLang Then
-        hr = LcidToRfc1766W(aLCID, ByVal StrPtr(s), 6)
-        If hr <> 0 Then
-        ' Msgbox "Fehler"
-            Exit Function
-        End If
-        Dim i As Long
-        For i = 0 To 1
-            If Len(s) > 3 + i Then
-                Mid$(s, 4 + i, 1) = UCase$(Mid$(s, 4 + i, 1))
-            End If
-        Next
-        s = Trim0(s)
-    Else
-        hr = LCIDToLocaleName(aLCID, ByVal StrPtr(s), l, 0)
-        If hr = 0 Then
-            ' Msgbox "Fehler"
-            Exit Function
-        End If
-        s = Left(s, hr - 1)
-    End If
-    LCID_ToRfc1766 = s
+Public Function LCID_ToLocaleName(ByVal aLCID As Long) As String
+    Dim l As Long:   l = LOCALE_NAME_MAX_LENGTH
+    Dim s As String: s = Space$(l)
+    l = LCIDToLocaleName(aLCID, ByVal StrPtr(s), l, LOCALE_ALLOW_NEUTRAL_NAMES)
+    If l = 0 Then Exit Function
+    LCID_ToLocaleName = Left(s, l - 1)
 End Function
 
-Private Function LCID_ToLanguageName(ByVal aLCID As Long) As String
+Public Function LCID_ToLanguageName(ByVal aLCID As Long) As String
+    'retutrns the fullqualified name of the language in the users language
     Dim l As Long:   l = 256
     Dim s As String: s = String$(l, vbNullChar)
     l = VerLanguageNameW(aLCID, ByVal StrPtr(s), l)
@@ -447,8 +485,21 @@ Private Function LCID_ToLanguageName(ByVal aLCID As Long) As String
     LCID_ToLanguageName = Trim0(Left$(s, l))
 End Function
 
-Private Function Rfc1766String_ToLCID(ByVal sRfc1766 As String) As Long
-    Dim hr As Long: hr = Rfc1766ToLcidW(Rfc1766String_ToLCID, ByVal StrPtr(sRfc1766))
+Public Function LocaleName_ToLCID(ByVal sLocaleName As String) As Long
+    LocaleName_ToLCID = LocaleNameToLCID(StrPtr(sLocaleName), LOCALE_ALLOW_NEUTRAL_NAMES)
+End Function
+
+'                              1                               2                             3    |
+'0  1  2  3  4  5  6  7  8  9  0 | 1  2  3  4  5 | 6  7  8  9  0  1  2  3  4  5  6  7  8  9  0  1 |
+'           Reserved             |    Sort ID    |                   Language ID                  |
+Public Function MAKELCID(ByVal lgid As Long, ByVal srtid As Long) As Long
+    MAKELCID = lgid Or (srtid * 65536) '2^16 = 65536
+End Function
+
+Public Function MAKELANGID(ByVal p As Long, ByVal s As Long) As Long
+    'p: value in the range between 0x03FF - 0x0200
+    's: value in the range between   0x20 -   0x3F
+    MAKELANGID = s Or p
 End Function
 ' ^ ############################## ^ '    MLang    ' ^ ############################## ^ '
 
@@ -474,19 +525,6 @@ Private Function Trim0(s As String) As String
     Dim pos As Long: pos = InStr(1, Trim0, vbNullChar)
     If pos = 0 Then Exit Function
     Trim0 = Left$(Trim0, pos - 1)
-End Function
-
-'                              1                               2                             3    |
-'0  1  2  3  4  5  6  7  8  9  0 | 1  2  3  4  5 | 6  7  8  9  0  1  2  3  4  5  6  7  8  9  0  1 |
-'           Reserved             |    Sort ID    |                   Language ID                  |
-'
-Private Function MAKELCID(ByVal lgid As Long, ByVal srtid As Long) As Long
-    '
-End Function
-
-Private Function MAKELANGID(ByVal p As Long, ByVal s As Long) As Long
-    'p: value in the range between 0x03FF - 0x0200
-    's: value in the range between   0x20 -   0x3F
 End Function
 
 'Static Properties
@@ -538,11 +576,6 @@ Public Function LCID_ToHex() As String
     LCID_ToHex = "&H" & String$(4 - Len(sH), "0") & sH
 End Function
 
-Public Property Get KeyboardLayoutId() As Long
-    
-End Property
-'=> m_cultureData.IINPUTLANGUAGEHANDLE;
-
 Public Property Get Name() As String
     Name = m_Name ' en-EN ' en-US ' de-DE ' de-AT ' de-CH
 End Property
@@ -554,118 +587,118 @@ End Property
 Private Function ConstToStr(ByVal ID As Long) As String
     Dim s As String
     Select Case ID
-    Case LOCALE_NEUTRAL:               s = "NEUTRAL"               '&H0
-    Case LOCALE_ILANGUAGE:             s = "ILANGUAGE"             '&H1
-    Case LOCALE_SLANGUAGE:             s = "SLANGUAGE"             '&H2
-    Case LOCALE_SABBREVLANGNAME:       s = "SABBREVLANGNAME"       '&H3
-    Case LOCALE_SNATIVELANGNAME:       s = "SNATIVELANGNAME"       '&H4
-    Case LOCALE_ICOUNTRY:              s = "ICOUNTRY"              '&H5
-    Case LOCALE_SCOUNTRY:              s = "SCOUNTRY"              '&H6
-    Case LOCALE_SABBREVCTRYNAME:       s = "SABBREVCTRYNAME"       '&H7
-    Case LOCALE_SNATIVECTRYNAME:       s = "SNATIVECTRYNAME"       '&H8
-    Case LOCALE_IDEFAULTLANGUAGE:      s = "IDEFAULTLANGUAGE"      '&H9
-    Case LOCALE_IDEFAULTCOUNTRY:       s = "IDEFAULTCOUNTRY"       '&HA
-    Case LOCALE_IDEFAULTCODEPAGE:      s = "IDEFAULTCODEPAGE"      '&HB
-    Case LOCALE_SLIST:                 s = "SLIST"                 '&HC
-    Case LOCALE_IMEASURE:              s = "IMEASURE"              '&HD
-    Case LOCALE_SDECIMAL:              s = "SDECIMAL"              '&HE
-    Case LOCALE_STHOUSAND:             s = "STHOUSAND"             '&HF
-    Case LOCALE_SGROUPING:             s = "SGROUPING"             '&H10
-    Case LOCALE_IDIGITS:               s = "IDIGITS"               '&H11
-    Case LOCALE_ILZERO:                s = "ILZERO"                '&H12
-    Case LOCALE_SNATIVEDIGITS:         s = "SNATIVEDIGITS"         '&H13
-    Case LOCALE_SCURRENCY:             s = "SCURRENCY"             '&H14
-    Case LOCALE_SINTLSYMBOL:           s = "SINTLSYMBOL"           '&H15
-    Case LOCALE_SMONDECIMALSEP:        s = "SMONDECIMALSEP"        '&H16
-    Case LOCALE_SMONTHOUSANDSEP:       s = "SMONTHOUSANDSEP"       '&H17
-    Case LOCALE_SMONGROUPING:          s = "SMONGROUPING"          '&H18
-    Case LOCALE_ICURRDIGITS:           s = "ICURRDIGITS"           '&H19
-    Case LOCALE_IINTLCURRDIGITS:       s = "IINTLCURRDIGITS"       '&H1A
-    Case LOCALE_ICURRENCY:             s = "ICURRENCY"             '&H1B
-    Case LOCALE_INEGCURR:              s = "INEGCURR"              '&H1C
-    Case LOCALE_SDATE:                 s = "SDATE"                 '&H1D
-    Case LOCALE_STIME:                 s = "STIME"                 '&H1E
-    Case LOCALE_SSHORTDATE:            s = "SSHORTDATE"            '&H1F
-    Case LOCALE_SLONGDATE:             s = "SLONGDATE"             '&H20
-    Case LOCALE_IDATE:                 s = "IDATE"                 '&H21
-    Case LOCALE_ILDATE:                s = "ILDATE"                '&H22
-    Case LOCALE_ITIME:                 s = "ITIME"                 '&H23
-    Case LOCALE_ICENTURY:              s = "ICENTURY"              '&H24
-    Case LOCALE_ITLZERO:               s = "ITLZERO"               '&H25
-    Case LOCALE_IDAYLZERO:             s = "IDAYLZERO"             '&H26
-    Case LOCALE_IMONLZERO:             s = "IMONLZERO"             '&H27
-    Case LOCALE_S1159:                 s = "S1159"                 '&H28
-    Case LOCALE_S2359:                 s = "S2359"                 '&H29
-    Case LOCALE_SDAYNAME1:             s = "SDAYNAME1"             '&H2A
-    Case LOCALE_SDAYNAME2:             s = "SDAYNAME2"             '&H2B
-    Case LOCALE_SDAYNAME3:             s = "SDAYNAME3"             '&H2C
-    Case LOCALE_SDAYNAME4:             s = "SDAYNAME4"             '&H2D
-    Case LOCALE_SDAYNAME5:             s = "SDAYNAME5"             '&H2E
-    Case LOCALE_SDAYNAME6:             s = "SDAYNAME6"             '&H2F
-    Case LOCALE_SDAYNAME7:             s = "SDAYNAME7"             '&H30
-    Case LOCALE_SABBREVDAYNAME1:       s = "SABBREVDAYNAME1"       '&H31
-    Case LOCALE_SABBREVDAYNAME2:       s = "SABBREVDAYNAME2"       '&H32
-    Case LOCALE_SABBREVDAYNAME3:       s = "SABBREVDAYNAME3"       '&H33
-    Case LOCALE_SABBREVDAYNAME4:       s = "SABBREVDAYNAME4"       '&H34
-    Case LOCALE_SABBREVDAYNAME5:       s = "SABBREVDAYNAME5"       '&H35
-    Case LOCALE_SABBREVDAYNAME6:       s = "SABBREVDAYNAME6"       '&H36
-    Case LOCALE_SABBREVDAYNAME7:       s = "SABBREVDAYNAME7"       '&H37
-    Case LOCALE_SMONTHNAME1:           s = "SMONTHNAME1"           '&H38
-    Case LOCALE_SMONTHNAME2:           s = "SMONTHNAME2"           '&H39
-    Case LOCALE_SMONTHNAME3:           s = "SMONTHNAME3"           '&H3A
-    Case LOCALE_SMONTHNAME4:           s = "SMONTHNAME4"           '&H3B
-    Case LOCALE_SMONTHNAME5:           s = "SMONTHNAME5"           '&H3C
-    Case LOCALE_SMONTHNAME6:           s = "SMONTHNAME6"           '&H3D
-    Case LOCALE_SMONTHNAME7:           s = "SMONTHNAME7"           '&H3E
-    Case LOCALE_SMONTHNAME8:           s = "SMONTHNAME8"           '&H3F
-    Case LOCALE_SMONTHNAME9:           s = "SMONTHNAME9"           '&H40
-    Case LOCALE_SMONTHNAME10:          s = "SMONTHNAME10"          '&H41
-    Case LOCALE_SMONTHNAME11:          s = "SMONTHNAME11"          '&H42
-    Case LOCALE_SMONTHNAME12:          s = "SMONTHNAME12"          '&H43
-    Case LOCALE_SABBREVMONTHNAME1:     s = "SABBREVMONTHNAME1"     '&H44
-    Case LOCALE_SABBREVMONTHNAME2:     s = "SABBREVMONTHNAME2"     '&H45
-    Case LOCALE_SABBREVMONTHNAME3:     s = "SABBREVMONTHNAME3"     '&H46
-    Case LOCALE_SABBREVMONTHNAME4:     s = "SABBREVMONTHNAME4"     '&H47
-    Case LOCALE_SABBREVMONTHNAME5:     s = "SABBREVMONTHNAME5"     '&H48
-    Case LOCALE_SABBREVMONTHNAME6:     s = "SABBREVMONTHNAME6"     '&H49
-    Case LOCALE_SABBREVMONTHNAME7:     s = "SABBREVMONTHNAME7"     '&H4A
-    Case LOCALE_SABBREVMONTHNAME8:     s = "SABBREVMONTHNAME8"     '&H4B
-    Case LOCALE_SABBREVMONTHNAME9:     s = "SABBREVMONTHNAME9"     '&H4C
-    Case LOCALE_SABBREVMONTHNAME10:    s = "SABBREVMONTHNAME10"    '&H4D
-    Case LOCALE_SABBREVMONTHNAME11:    s = "SABBREVMONTHNAME11"    '&H4E
-    Case LOCALE_SABBREVMONTHNAME12:    s = "SABBREVMONTHNAME12"    '&H4F
-    Case LOCALE_SPOSITIVESIGN:         s = "SPOSITIVESIGN"         '&H50
-    Case LOCALE_SNEGATIVESIGN:         s = "SNEGATIVESIGN"         '&H51
-    Case LOCALE_IPOSSIGNPOSN:          s = "IPOSSIGNPOSN"          '&H52
-    Case LOCALE_INEGSIGNPOSN:          s = "INEGSIGNPOSN"          '&H53
-    Case LOCALE_IPOSSYMPRECEDES:       s = "IPOSSYMPRECEDES"       '&H54
-    Case LOCALE_IPOSSEPBYSPACE:        s = "IPOSSEPBYSPACE"        '&H55
-    Case LOCALE_INEGSYMPRECEDES:       s = "INEGSYMPRECEDES"       '&H56
-    Case LOCALE_INEGSEPBYSPACE:        s = "INEGSEPBYSPACE"        '&H57
-    Case LOCALE_FONTSIGNATURE:         s = "FONTSIGNATURE"         '&H58
-    Case LOCALE_SISO639LANGNAME:       s = "SISO639LANGNAME"       '&H59
-    Case LOCALE_SISO3166CTRYNAME:      s = "SISO3166CTRYNAME"      '&H5A
-                                  
-    Case LOCALE_IGEOID:                s = "LOCALE_IGEOID"              '&H5B
-    Case LOCALE_SNAME:                 s = "LOCALE_SNAME"               '&H5C
-    Case LOCALE_SDURATION:             s = "LOCALE_SDURATION"           '&H5D
-    Case LOCALE_SKEYBOARDSTOINSTALL:   s = "LOCALE_SKEYBOARDSTOINSTALL" '&H5E
-    Case LOCALE_SSHORTESTDAYNAME1:     s = "LOCALE_SSHORTESTDAYNAME1"   '&H60
-    Case LOCALE_SSHORTESTDAYNAME2:     s = "LOCALE_SSHORTESTDAYNAME2"   '&H61
-    Case LOCALE_SSHORTESTDAYNAME3:     s = "LOCALE_SSHORTESTDAYNAME3"   '&H62
-    Case LOCALE_SSHORTESTDAYNAME4:     s = "LOCALE_SSHORTESTDAYNAME4"   '&H63
-    Case LOCALE_SSHORTESTDAYNAME5:     s = "LOCALE_SSHORTESTDAYNAME5"   '&H64
-    Case LOCALE_SSHORTESTDAYNAME6:     s = "LOCALE_SSHORTESTDAYNAME6"   '&H65
-    Case LOCALE_SSHORTESTDAYNAME7:     s = "LOCALE_SSHORTESTDAYNAME7"   '&H66
-    Case LOCALE_SISO639LANGNAME2:      s = "LOCALE_SISO639LANGNAME2"    '&H67
-    Case LOCALE_SISO3166CTRYNAME2:     s = "LOCALE_SISO3166CTRYNAME2"   '&H68
-    Case LOCALE_SNAN:                  s = "LOCALE_SNAN"                '&H69
-    Case LOCALE_SPOSINFINITY:          s = "LOCALE_SPOSINFINITY"        '&H6A
-    Case LOCALE_SNEGINFINITY:          s = "LOCALE_SNEGINFINITY"        '&H6B
-    Case LOCALE_SSCRIPTS:              s = "LOCALE_SSCRIPTS"            '&H6C
-    Case LOCALE_SORTNAME:              s = "LOCALE_SORTNAME"            '&H6D
+    Case LOCALE_NEUTRAL:                s = "LOCALE_NEUTRAL"                '&H0
+    Case LOCALE_ILANGUAGE:              s = "LOCALE_ILANGUAGE"              '&H1
+    Case LOCALE_SLANGUAGE:              s = "LOCALE_SLANG./LOC.DISP.NAME"   '&H2
+    Case LOCALE_SABBREVLANGNAME:        s = "LOCALE_SABBREVLANGNAME"        '&H3
+    Case LOCALE_SNATIVELANGUAGENAME:    s = "LOCALE_SNATIVELANGUAGENAME"    '&H4
+    Case LOCALE_ICOUNTRY:               s = "LOCALE_ICOUNTRY/IDIALOGCODE"   '&H5
+    Case LOCALE_SCOUNTRY:               s = "LOCALE_SCOUNTRY"               '&H6
+    Case LOCALE_SABBREVCOUNTRYNAME:     s = "LOCALE_SABBREVCOUNTRYNAME"     '&H7
+    Case LOCALE_SNATIVECOUNTRYNAME:     s = "LOCALE_SNATIVECOUNTRYNAME"     '&H8
+    Case LOCALE_IDEFAULTLANGUAGE:       s = "LOCALE_IDEFAULTLANGUAGE"       '&H9
+    Case LOCALE_IDEFAULTCOUNTRY:        s = "LOCALE_IDEFAULTCOUNTRY"        '&HA
+    Case LOCALE_IDEFAULTCODEPAGE:       s = "LOCALE_IDEFAULTCODEPAGE"       '&HB
+    Case LOCALE_SLIST:                  s = "LOCALE_SLIST"                  '&HC
+    Case LOCALE_IMEASURE:               s = "LOCALE_IMEASURE"               '&HD
+    Case LOCALE_SDECIMAL:               s = "LOCALE_SDECIMAL"               '&HE
+    Case LOCALE_STHOUSAND:              s = "LOCALE_STHOUSAND"              '&HF
+    Case LOCALE_SGROUPING:              s = "LOCALE_SGROUPING"              '&H10
+    Case LOCALE_IDIGITS:                s = "LOCALE_IDIGITS"                '&H11
+    Case LOCALE_ILZERO:                 s = "LOCALE_ILZERO"                 '&H12
+    Case LOCALE_SNATIVEDIGITS:          s = "LOCALE_SNATIVEDIGITS"          '&H13
+    Case LOCALE_SCURRENCY:              s = "LOCALE_SCURRENCY"              '&H14
+    Case LOCALE_SINTLSYMBOL:            s = "LOCALE_SINTLSYMBOL"            '&H15
+    Case LOCALE_SMONDECIMALSEP:         s = "LOCALE_SMONDECIMALSEP"         '&H16
+    Case LOCALE_SMONTHOUSANDSEP:        s = "LOCALE_SMONTHOUSANDSEP"        '&H17
+    Case LOCALE_SMONGROUPING:           s = "LOCALE_SMONGROUPING"           '&H18
+    Case LOCALE_ICURRDIGITS:            s = "LOCALE_ICURRDIGITS"            '&H19
+    Case LOCALE_IINTLCURRDIGITS:        s = "LOCALE_IINTLCURRDIGITS"        '&H1A
+    Case LOCALE_ICURRENCY:              s = "LOCALE_ICURRENCY"              '&H1B
+    Case LOCALE_INEGCURR:               s = "LOCALE_INEGCURR"               '&H1C
+    Case LOCALE_SDATE:                  s = "LOCALE_SDATE"                  '&H1D
+    Case LOCALE_STIME:                  s = "LOCALE_STIME"                  '&H1E
+    Case LOCALE_SSHORTDATE:             s = "LOCALE_SSHORTDATE"             '&H1F
+    Case LOCALE_SLONGDATE:              s = "LOCALE_SLONGDATE"              '&H20
+    Case LOCALE_IDATE:                  s = "LOCALE_IDATE"                  '&H21
+    Case LOCALE_ILDATE:                 s = "LOCALE_ILDATE"                 '&H22
+    Case LOCALE_ITIME:                  s = "LOCALE_ITIME"                  '&H23
+    Case LOCALE_ICENTURY:               s = "LOCALE_ICENTURY"               '&H24
+    Case LOCALE_ITLZERO:                s = "LOCALE_ITLZERO"                '&H25
+    Case LOCALE_IDAYLZERO:              s = "LOCALE_IDAYLZERO"              '&H26
+    Case LOCALE_IMONLZERO:              s = "LOCALE_IMONLZERO"              '&H27
+    Case LOCALE_S1159:                  s = "LOCALE_S1159/SAM"              '&H28
+    Case LOCALE_S2359:                  s = "LOCALE_S2359/SPM"              '&H29
+    Case LOCALE_SDAYNAME1:              s = "LOCALE_SDAYNAME1"              '&H2A
+    Case LOCALE_SDAYNAME2:              s = "LOCALE_SDAYNAME2"              '&H2B
+    Case LOCALE_SDAYNAME3:              s = "LOCALE_SDAYNAME3"              '&H2C
+    Case LOCALE_SDAYNAME4:              s = "LOCALE_SDAYNAME4"              '&H2D
+    Case LOCALE_SDAYNAME5:              s = "LOCALE_SDAYNAME5"              '&H2E
+    Case LOCALE_SDAYNAME6:              s = "LOCALE_SDAYNAME6"              '&H2F
+    Case LOCALE_SDAYNAME7:              s = "LOCALE_SDAYNAME7"              '&H30
+    Case LOCALE_SABBREVDAYNAME1:        s = "LOCALE_SABBREVDAYNAME1"        '&H31
+    Case LOCALE_SABBREVDAYNAME2:        s = "LOCALE_SABBREVDAYNAME2"        '&H32
+    Case LOCALE_SABBREVDAYNAME3:        s = "LOCALE_SABBREVDAYNAME3"        '&H33
+    Case LOCALE_SABBREVDAYNAME4:        s = "LOCALE_SABBREVDAYNAME4"        '&H34
+    Case LOCALE_SABBREVDAYNAME5:        s = "LOCALE_SABBREVDAYNAME5"        '&H35
+    Case LOCALE_SABBREVDAYNAME6:        s = "LOCALE_SABBREVDAYNAME6"        '&H36
+    Case LOCALE_SABBREVDAYNAME7:        s = "LOCALE_SABBREVDAYNAME7"        '&H37
+    Case LOCALE_SMONTHNAME1:            s = "LOCALE_SMONTHNAME1"            '&H38
+    Case LOCALE_SMONTHNAME2:            s = "LOCALE_SMONTHNAME2"            '&H39
+    Case LOCALE_SMONTHNAME3:            s = "LOCALE_SMONTHNAME3"            '&H3A
+    Case LOCALE_SMONTHNAME4:            s = "LOCALE_SMONTHNAME4"            '&H3B
+    Case LOCALE_SMONTHNAME5:            s = "LOCALE_SMONTHNAME5"            '&H3C
+    Case LOCALE_SMONTHNAME6:            s = "LOCALE_SMONTHNAME6"            '&H3D
+    Case LOCALE_SMONTHNAME7:            s = "LOCALE_SMONTHNAME7"            '&H3E
+    Case LOCALE_SMONTHNAME8:            s = "LOCALE_SMONTHNAME8"            '&H3F
+    Case LOCALE_SMONTHNAME9:            s = "LOCALE_SMONTHNAME9"            '&H40
+    Case LOCALE_SMONTHNAME10:           s = "LOCALE_SMONTHNAME10"           '&H41
+    Case LOCALE_SMONTHNAME11:           s = "LOCALE_SMONTHNAME11"           '&H42
+    Case LOCALE_SMONTHNAME12:           s = "LOCALE_SMONTHNAME12"           '&H43
+    Case LOCALE_SABBREVMONTHNAME1:      s = "LOCALE_SABBREVMONTHNAME1"      '&H44
+    Case LOCALE_SABBREVMONTHNAME2:      s = "LOCALE_SABBREVMONTHNAME2"      '&H45
+    Case LOCALE_SABBREVMONTHNAME3:      s = "LOCALE_SABBREVMONTHNAME3"      '&H46
+    Case LOCALE_SABBREVMONTHNAME4:      s = "LOCALE_SABBREVMONTHNAME4"      '&H47
+    Case LOCALE_SABBREVMONTHNAME5:      s = "LOCALE_SABBREVMONTHNAME5"      '&H48
+    Case LOCALE_SABBREVMONTHNAME6:      s = "LOCALE_SABBREVMONTHNAME6"      '&H49
+    Case LOCALE_SABBREVMONTHNAME7:      s = "LOCALE_SABBREVMONTHNAME7"      '&H4A
+    Case LOCALE_SABBREVMONTHNAME8:      s = "LOCALE_SABBREVMONTHNAME8"      '&H4B
+    Case LOCALE_SABBREVMONTHNAME9:      s = "LOCALE_SABBREVMONTHNAME9"      '&H4C
+    Case LOCALE_SABBREVMONTHNAME10:     s = "LOCALE_SABBREVMONTHNAME10"     '&H4D
+    Case LOCALE_SABBREVMONTHNAME11:     s = "LOCALE_SABBREVMONTHNAME11"     '&H4E
+    Case LOCALE_SABBREVMONTHNAME12:     s = "LOCALE_SABBREVMONTHNAME12"     '&H4F
+    Case LOCALE_SPOSITIVESIGN:          s = "LOCALE_SPOSITIVESIGN"          '&H50
+    Case LOCALE_SNEGATIVESIGN:          s = "LOCALE_SNEGATIVESIGN"          '&H51
+    Case LOCALE_IPOSSIGNPOSN:           s = "LOCALE_IPOSSIGNPOSN"           '&H52
+    Case LOCALE_INEGSIGNPOSN:           s = "LOCALE_INEGSIGNPOSN"           '&H53
+    Case LOCALE_IPOSSYMPRECEDES:        s = "LOCALE_IPOSSYMPRECEDES"        '&H54
+    Case LOCALE_IPOSSEPBYSPACE:         s = "LOCALE_IPOSSEPBYSPACE"         '&H55
+    Case LOCALE_INEGSYMPRECEDES:        s = "LOCALE_INEGSYMPRECEDES"        '&H56
+    Case LOCALE_INEGSEPBYSPACE:         s = "LOCALE_INEGSEPBYSPACE"         '&H57
+    Case LOCALE_FONTSIGNATURE:          s = "LOCALE_FONTSIGNATURE"          '&H58
+    Case LOCALE_SISO639LANGNAME:        s = "LOCALE_SISO639LANGNAME"        '&H59
+    Case LOCALE_SISO3166CTRYNAME:       s = "LOCALE_SISO3166CTRYNAME"       '&H5A
+                                   
+    Case LOCALE_IGEOID:                 s = "LOCALE_IGEOID"                 '&H5B
+    Case LOCALE_SNAME:                  s = "LOCALE_SNAME"                  '&H5C
+    Case LOCALE_SDURATION:              s = "LOCALE_SDURATION"              '&H5D
+    Case LOCALE_SKEYBOARDSTOINSTALL:    s = "LOCALE_SKEYBOARDSTOINSTALL"    '&H5E
+    Case LOCALE_SSHORTESTDAYNAME1:      s = "LOCALE_SSHORTESTDAYNAME1"      '&H60
+    Case LOCALE_SSHORTESTDAYNAME2:      s = "LOCALE_SSHORTESTDAYNAME2"      '&H61
+    Case LOCALE_SSHORTESTDAYNAME3:      s = "LOCALE_SSHORTESTDAYNAME3"      '&H62
+    Case LOCALE_SSHORTESTDAYNAME4:      s = "LOCALE_SSHORTESTDAYNAME4"      '&H63
+    Case LOCALE_SSHORTESTDAYNAME5:      s = "LOCALE_SSHORTESTDAYNAME5"      '&H64
+    Case LOCALE_SSHORTESTDAYNAME6:      s = "LOCALE_SSHORTESTDAYNAME6"      '&H65
+    Case LOCALE_SSHORTESTDAYNAME7:      s = "LOCALE_SSHORTESTDAYNAME7"      '&H66
+    Case LOCALE_SISO639LANGNAME2:       s = "LOCALE_SISO639LANGNAME2"       '&H67
+    Case LOCALE_SISO3166CTRYNAME2:      s = "LOCALE_SISO3166CTRYNAME2"      '&H68
+    Case LOCALE_SNAN:                   s = "LOCALE_SNAN"                   '&H69
+    Case LOCALE_SPOSINFINITY:           s = "LOCALE_SPOSINFINITY"           '&H6A
+    Case LOCALE_SNEGINFINITY:           s = "LOCALE_SNEGINFINITY"           '&H6B
+    Case LOCALE_SSCRIPTS:               s = "LOCALE_SSCRIPTS"               '&H6C
+    Case LOCALE_SORTNAME:               s = "LOCALE_SORTNAME"               '&H6D
     
-    Case LOCALE_SPARENT:                s = "LOCALE_SPARENT"            '&H6D
+    Case LOCALE_SPARENT:                s = "LOCALE_SPARENT"                '&H6D
     
     Case LOCALE_SCONSOLEFALLBACKNAME:   s = "LOCALE_SCONSOLEFALLBACKNAME"   '&H6E ' new
     Case LOCALE_SLANGDISPLAYNAME:       s = "LOCALE_SLANGDISPLAYNAME"       '&H6F ' new
@@ -687,34 +720,34 @@ Private Function ConstToStr(ByVal ID As Long) As String
     Case LOCALE_SSHORTESTAM:            s = "LOCALE_SSHORTESTAM"            '&H7E ' new
     Case LOCALE_SSHORTESTPM:            s = "LOCALE_SSHORTESTPM"            '&H7F ' new
     
-    Case LOCALE_SENGLANGUAGE:          s = "SENGLANGUAGE"          '&H1001  ' 4097
-    Case LOCALE_SENGCOUNTRY:           s = "SENGCOUNTRY"           '&H1002
-    Case LOCALE_STIMEFORMAT:           s = "STIMEFORMAT"           '&H1003
-    Case LOCALE_IDEFAULTANSICODEPAGE:  s = "IDEFAULTANSICODEPAGE"  '&H1004
-    Case LOCALE_ITIMEMARKPOSN:         s = "ITIMEMARKPOSN"         '&H1005
-    Case LOCALE_SYEARMONTH:            s = "SYEARMONTH"            '&H1006
-    Case LOCALE_SENGCURRNAME:          s = "SENGCURRNAME"          '&H1007
-    Case LOCALE_SNATIVECURRNAME:       s = "SNATIVECURRNAME"       '&H1008
-    Case LOCALE_ICALENDARTYPE:         s = "ICALENDARTYPE"         '&H1009
-    Case LOCALE_IPAPERSIZE:            s = "IPAPERSIZE"            '&H100A
-    Case LOCALE_IOPTIONALCALENDAR:     s = "IOPTIONALCALENDAR"     '&H100B
-    Case LOCALE_IFIRSTDAYOFWEEK:       s = "IFIRSTDAYOFWEEK"       '&H100C
-    Case LOCALE_IFIRSTWEEKOFYEAR:      s = "IFIRSTWEEKOFYEAR"      '&H100D
-    Case LOCALE_SMONTHNAME13:          s = "SMONTHNAME13"          '&H100E
-    Case LOCALE_SABBREVMONTHNAME13:    s = "SABBREVMONTHNAME13"    '&H100F
-    Case LOCALE_INEGNUMBER:            s = "INEGNUMBER"            '&H1010
-    Case LOCALE_IDEFAULTMACCODEPAGE:   s = "IDEFAULTMACCODEPAGE"   '&H1011
-    Case LOCALE_IDEFAULTEBCDICCODEPAGE: s = "IDEFAULTEBCDICCODEPAGE" '&H1012
-    Case LOCALE_SSORTNAME:             s = "SSORTNAME"             '&H1013
-    Case LOCALE_IDIGITSUBSTITUTION:    s = "IDIGITSUBSTITUTION"    '&H1014  '4116
+    Case LOCALE_SENGLANGUAGE:           s = "LOCALE_SENGLANGUAGE"           '&H1001  ' 4097
+    Case LOCALE_SENGCOUNTRY:            s = "LOCALE_SENGCOUNTRY"            '&H1002
+    Case LOCALE_STIMEFORMAT:            s = "LOCALE_STIMEFORMAT"            '&H1003
+    Case LOCALE_IDEFAULTANSICODEPAGE:   s = "LOCALE_IDEFAULTANSICODEPAGE"   '&H1004
+    Case LOCALE_ITIMEMARKPOSN:          s = "LOCALE_ITIMEMARKPOSN"          '&H1005
+    Case LOCALE_SYEARMONTH:             s = "LOCALE_SYEARMONTH"             '&H1006
+    Case LOCALE_SENGCURRNAME:           s = "LOCALE_SENGCURRNAME"           '&H1007
+    Case LOCALE_SNATIVECURRNAME:        s = "LOCALE_SNATIVECURRNAME"        '&H1008
+    Case LOCALE_ICALENDARTYPE:          s = "LOCALE_ICALENDARTYPE"          '&H1009
+    Case LOCALE_IPAPERSIZE:             s = "LOCALE_IPAPERSIZE"             '&H100A
+    Case LOCALE_IOPTIONALCALENDAR:      s = "LOCALE_IOPTIONALCALENDAR"      '&H100B
+    Case LOCALE_IFIRSTDAYOFWEEK:        s = "LOCALE_IFIRSTDAYOFWEEK"        '&H100C
+    Case LOCALE_IFIRSTWEEKOFYEAR:       s = "LOCALE_IFIRSTWEEKOFYEAR"       '&H100D
+    Case LOCALE_SMONTHNAME13:           s = "LOCALE_SMONTHNAME13"           '&H100E
+    Case LOCALE_SABBREVMONTHNAME13:     s = "LOCALE_SABBREVMONTHNAME13"     '&H100F
+    Case LOCALE_INEGNUMBER:             s = "LOCALE_INEGNUMBER"             '&H1010
+    Case LOCALE_IDEFAULTMACCODEPAGE:    s = "LOCALE_IDEFAULTMACCODEPAGE"    '&H1011
+    Case LOCALE_IDEFAULTEBCDICCODEPAGE: s = "LOCALE_IDEFAULTEBCDICCODEPAGE" '&H1012
+    Case LOCALE_SSORTNAME:              s = "LOCALE_SSORTNAME"              '&H1013
+    Case LOCALE_IDIGITSUBSTITUTION:     s = "LOCALE_IDIGITSUBSTITUTION"     '&H1014  '4116
     
-    Case LOCALE_CUSTOM_UI_DEFAULT:     s = "LOCALE_CUSTOM_UI_DEFAULT"     '&H1400
-    Case LOCALE_ALLOW_NEUTRAL_NAMES:   s = "LOCALE_ALLOW_NEUTRAL_NAMES"   '&H8000000
-    Case LOCALE_RETURN_GENITIVE_NAMES: s = "LOCALE_RETURN_GENITIVE_NAMES" '&H10000000
+    Case LOCALE_CUSTOM_UI_DEFAULT:      s = "LOCALE_CUSTOM_UI_DEFAULT"      '&H1400
+    Case LOCALE_ALLOW_NEUTRAL_NAMES:    s = "LOCALE_ALLOW_NEUTRAL_NAMES"    '&H8000000
+    Case LOCALE_RETURN_GENITIVE_NAMES:  s = "LOCALE_RETURN_GENITIVE_NAMES"  '&H10000000
     
-    Case LOCALE_RETURN_NUMBER:         s = "LOCALE_RETURN_NUMBER"         '&H20000000
-    Case LOCALE_USE_CP_ACP:            s = "LOCALE_USE_CP_ACP"            '&H40000000
-    Case LOCALE_NOUSEROVERRIDE:        s = "LOCALE_NOUSEROVERRIDE"        '&H80000000
+    Case LOCALE_RETURN_NUMBER:          s = "LOCALE_RETURN_NUMBER"          '&H20000000
+    Case LOCALE_USE_CP_ACP:             s = "LOCALE_USE_CP_ACP"             '&H40000000
+    Case LOCALE_NOUSEROVERRIDE:         s = "LOCALE_NOUSEROVERRIDE"         '&H80000000
     
     End Select
     ConstToStr = s
@@ -724,12 +757,38 @@ End Function
 'Calendar_ToStr As String                                    'System.Globalization.GregorianCalendar
 'DateTimeFormat_ToStr As DateTimeFormatInfo                  '
 'DisplayName As String                                       'Deutsch (Schweiz)
+Public Property Get DisplayName() As String
+    'DisplayName = LocaleInfo(LOCALE_SLANGUAGE)
+    DisplayName = LocaleInfo(LOCALE_SNATIVEDISPLAYNAME)
+End Property
 'EnglishName As String                                       'German (Switzerland)
+Public Property Get EnglishName() As String
+    DisplayName = LocaleInfo(LOCALE_SENGLISHDISPLAYNAME)
+End Property
+
 'IsNeutralCulture As Boolean                                 'False
+Public Property Get IsNeutralCulture() As Boolean
+    'IsNeutralCulture = LocaleInfo(LOCALE_)
+End Property
 'KeyboardLayoutId As Integer                                 '2055
+Public Property Get KeyboardLayoutId() As Long
+Try: On Error GoTo Catch
+    Dim s As String: s = LocaleInfo(LOCALE_SKEYBOARDSTOINSTALL)
+    Dim sa() As String: sa = Split(s, ":")
+    If UBound(sa) Then
+        KeyboardLayoutId = CLng("&H" & sa(0))
+    End If
+Catch:
+End Property
+'=> m_cultureData.IINPUTLANGUAGEHANDLE;
+
 'LCID As Integer                                             '2055
 'Name As String                                              'de-CH
 'NativeName As String                                        'Deutsch (Schweiz)
+Public Property Get NativeName() As String
+    NativeName = LocaleInfo(LOCALE_SNATIVELANGNAME)
+End Property
+
 'NumberFormat As NumberFormatInfo                            '
 'NumberFormat_ToStr As String                                'System.Globalization.NumberFormatInfo
 'OptionalCalendars As Calendar()                             '
@@ -739,12 +798,27 @@ End Function
 'TextInfo As TextInfo
 'TextInfo.CultureName As String                              'de-CH
 'TwoLetterISOLanguageName As String                          'de
+Public Property Get TwoLetterISOLanguageName() As String
+    TwoLetterISOLanguageName = LocaleInfo(LOCALE_SISO639LANGNAME)
+End Property
+
 'ThreeLetterISOLanguageName As String                        'deu
+Public Property Get ThreeLetterISOLanguageName() As String
+    ThreeLetterISOLanguageName = LocaleInfo(LOCALE_SISO639LANGNAME2)
+End Property
+
 'ThreeLetterWindowsLanguageName As String                    'DES
+Public Property Get ThreeLetterWindowsLanguageName() As String
+    ThreeLetterWindowsLanguageName = LocaleInfo(LOCALE_SABBREVLANGNAME)
+End Property
+
 '
 '        s = s & ci.Calendar.ToString & vbCrLf
 '        's = s & ci.Calendar. & vbCrLf
 '        s = s & ci.DateTimeFormat.MonthNames.Count
+Public Property Get DatFmt_MonthNames_Count() As Long
+    
+End Property
 '        s = s & ci.DateTimeFormat.DayNames.Count
 '        s = s & ci.DateTimeFormat.FirstDayOfWeek
 '        s = s & ci.DateTimeFormat.FullDateTimePattern
