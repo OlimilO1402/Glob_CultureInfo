@@ -95,6 +95,16 @@ Begin VB.Form FMain
       Top             =   360
       Width           =   11775
    End
+   Begin VB.PictureBox Picture1 
+      BorderStyle     =   0  'Kein
+      Height          =   255
+      Left            =   11880
+      ScaleHeight     =   255
+      ScaleWidth      =   615
+      TabIndex        =   7
+      Top             =   120
+      Width           =   615
+   End
 End
 Attribute VB_Name = "FMain"
 Attribute VB_GlobalNameSpace = False
@@ -106,6 +116,19 @@ Private m_CultureInfos As Collection 'Of CultureInfo
 Private m_ci As CultureInfo
 'Private m_de As CultureInfo
 'Private m_at As CultureInfo
+
+Private Sub Form_Load()
+    Me.Caption = App.EXEName & " v" & App.Major & "." & App.Minor & "." & App.Revision
+End Sub
+
+Private Sub Form_Resize()
+    Dim l As Single, T As Single, W As Single, H As Single
+    l = List1.Left: T = List1.Top: W = List1.Width
+    H = Me.ScaleHeight - T
+    If W > 0 And H > 0 Then List1.Move l, T, W, H
+    l = Text1.Left: W = Me.ScaleWidth - l
+    If W > 0 And H > 0 Then Text1.Move l, T, W, H
+End Sub
 
 Private Sub BtnTestDefaults_Click()
     If m_ci Is Nothing Then Set m_ci = New CultureInfo
@@ -207,24 +230,12 @@ Private Sub Command2_Click()
     MsgBox GetMaxNameLen
 End Sub
 
-Private Sub Form_Load()
-    Me.Caption = App.EXEName & " v" & App.Major & "." & App.Minor & "." & App.Revision
-End Sub
-
-Private Sub Form_Resize()
-    Dim l As Single, T As Single, W As Single, H As Single
-    l = List1.Left: T = List1.Top: W = List1.Width
-    H = Me.ScaleHeight - T
-    If W > 0 And H > 0 Then List1.Move l, T, W, H
-    l = Text1.Left: W = Me.ScaleWidth - l
-    If W > 0 And H > 0 Then Text1.Move l, T, W, H
-End Sub
-
 Private Sub BtnListLCIDString_Click()
     'CreateCultureInfos
     'Set m_CultureInfos = MLocale.GetCultureInfos(Mode_EnumSystemLocale, MLocale.LCID_INSTALLED)
     Set m_CultureInfos = MLocale.GetCultureInfos(Mode_EnumSystemLocaleEx, MLocale.LOCALE_ALL)
     UpdateViewList
+    MFlags.ReadFlagPics
 End Sub
 
 Private Sub CreateCultureInfos()
@@ -287,6 +298,7 @@ Sub UpdateViewDetails()
         s = ""
     Else
         With m_ci
+            Dim sIso3 As String: sIso3 = .AbbrevCountryName
             Dim llcid As Long: llcid = .lcid
             s = s & "LCID        : " & CStr(llcid) & "(d) = &H" & Hex(llcid) & vbCrLf
             s = s & "Name        : " & .Name & vbCrLf
@@ -295,4 +307,5 @@ Sub UpdateViewDetails()
         End With
     End If
     Text1.Text = s
+    Set Picture1.Picture = MFlags.Flag(sIso3)
 End Sub

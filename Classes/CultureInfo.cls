@@ -580,6 +580,10 @@ Public Property Get Name() As String
     Name = m_Name ' en-EN ' en-US ' de-DE ' de-AT ' de-CH
 End Property
 
+Public Property Get AbbrevCountryName() As String
+    AbbrevCountryName = LocaleInfo(LOCALE_SABBREVCOUNTRYNAME)
+End Property
+
 Public Property Get Calendar_ToStr() As String
     'GregorianCalendar
 End Property
@@ -763,7 +767,7 @@ Public Property Get DisplayName() As String
 End Property
 'EnglishName As String                                       'German (Switzerland)
 Public Property Get EnglishName() As String
-    DisplayName = LocaleInfo(LOCALE_SENGLISHDISPLAYNAME)
+    EnglishName = LocaleInfo(LOCALE_SENGLISHDISPLAYNAME)
 End Property
 
 'IsNeutralCulture As Boolean                                 'False
@@ -786,7 +790,7 @@ End Property
 'Name As String                                              'de-CH
 'NativeName As String                                        'Deutsch (Schweiz)
 Public Property Get NativeName() As String
-    NativeName = LocaleInfo(LOCALE_SNATIVELANGNAME)
+    NativeName = LocaleInfo(LOCALE_SNATIVELANGUAGENAME)
 End Property
 
 'NumberFormat As NumberFormatInfo                            '

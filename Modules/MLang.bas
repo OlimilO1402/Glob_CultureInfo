@@ -69,57 +69,57 @@ Public Function MAKELANGID(ByVal p As Long, ByVal s As Long) As Long
     MAKELANGID = s Or p
 End Function
 
-Private Function Trim0(ByVal s As String) As String
-    Trim0 = VBA.Strings.Trim$(Left$(s, lstrlenW(ByVal StrPtr(s))))
-End Function
-
-Public Function ListLCIDStrings() As Collection
-    
-    Dim HashCol As New Collection
-    Dim lcids   As New Collection
-    
-    Dim c As Long
-    Dim i As Long
-    For i = 1 To &HFF
-        Dim j As Long
-        For j = 0 To &HFF
-            'Dim sBuf As String * 256
-            Dim lcid  As Long: lcid = j * &H400 + i
-            Dim sLcid As String: sLcid = LCID_ToRfc1766(lcid)
-            lcid = Rfc1766String_ToLCID(sLcid)
-            sLcid = LCID_ToRfc1766(lcid)
-            If Len(sLcid) < 5 Then sLcid = sLcid & Space$(5 - Len(sLcid))
-            'Dim sLen As Long: sLen = VerLanguageNameW(lcid, StrPtr(sBuf), Len(sBuf))
-            'If sLen > 0 Then
-                Dim sLCItem As String: sLCItem = LCID_ToLanguageName(lcid) 'Left$(sBuf, sLen)
-                'lcid = LCID_ToRfc1766(sLCItem)
-                If Not Col_Contains(HashCol, sLCItem) Then
-                    HashCol.Add sLCItem, sLCItem
-                    Dim sH As String: sH = Hex$(lcid)
-                    sH = String$(4 - Len(sH), "0") & sH
-                    Dim sItem As String: sItem = "&H" & sH & "    " & sLcid & "   " & sLCItem
-                    c = c + 1
-                    sH = CStr(c)
-                    sH = String$(3 - Len(sH), "0") & sH & "    "
-                    sItem = sH & sItem
-                    lcids.Add sItem
-                End If
-            'End If
-        Next
-    Next
-    Set ListLCIDStrings = lcids
-End Function
-
-Private Function Col_Contains(col As Collection, Key As String) As Boolean
-    'for this Function all credits go to the incredible www.vb-tec.de alias Jost Schwider
-    'you can find the original version of this function here: https://vb-tec.de/collctns.htm
-    On Error Resume Next
-'  '"Extras->Optionen->Allgemein->Unterbrechen bei Fehlern->Bei nicht verarbeiteten Fehlern"
-    If IsEmpty(col(Key)) Then: 'DoNothing
-    Col_Contains = (Err.Number = 0)
-    On Error GoTo 0
-End Function
-
+'Private Function Trim0(ByVal s As String) As String
+'    Trim0 = VBA.Strings.Trim$(Left$(s, lstrlenW(ByVal StrPtr(s))))
+'End Function
+'
+'Public Function ListLCIDStrings() As Collection
+'
+'    Dim HashCol As New Collection
+'    Dim lcids   As New Collection
+'
+'    Dim c As Long
+'    Dim i As Long
+'    For i = 1 To &HFF
+'        Dim j As Long
+'        For j = 0 To &HFF
+'            'Dim sBuf As String * 256
+'            Dim lcid  As Long: lcid = j * &H400 + i
+'            Dim sLcid As String: sLcid = LCID_ToRfc1766(lcid)
+'            lcid = Rfc1766String_ToLCID(sLcid)
+'            sLcid = LCID_ToRfc1766(lcid)
+'            If Len(sLcid) < 5 Then sLcid = sLcid & Space$(5 - Len(sLcid))
+'            'Dim sLen As Long: sLen = VerLanguageNameW(lcid, StrPtr(sBuf), Len(sBuf))
+'            'If sLen > 0 Then
+'                Dim sLCItem As String: sLCItem = LCID_ToLanguageName(lcid) 'Left$(sBuf, sLen)
+'                'lcid = LCID_ToRfc1766(sLCItem)
+'                If Not Col_Contains(HashCol, sLCItem) Then
+'                    HashCol.Add sLCItem, sLCItem
+'                    Dim sH As String: sH = Hex$(lcid)
+'                    sH = String$(4 - Len(sH), "0") & sH
+'                    Dim sItem As String: sItem = "&H" & sH & "    " & sLcid & "   " & sLCItem
+'                    c = c + 1
+'                    sH = CStr(c)
+'                    sH = String$(3 - Len(sH), "0") & sH & "    "
+'                    sItem = sH & sItem
+'                    lcids.Add sItem
+'                End If
+'            'End If
+'        Next
+'    Next
+'    Set ListLCIDStrings = lcids
+'End Function
+'
+'Private Function Col_Contains(col As Collection, key As String) As Boolean
+'    'for this Function all credits go to the incredible www.vb-tec.de alias Jost Schwider
+'    'you can find the original version of this function here: https://vb-tec.de/collctns.htm
+'    On Error Resume Next
+''  '"Extras->Optionen->Allgemein->Unterbrechen bei Fehlern->Bei nicht verarbeiteten Fehlern"
+'    If IsEmpty(col(key)) Then: 'DoNothing
+'    Col_Contains = (Err.Number = 0)
+'    On Error GoTo 0
+'End Function
+'
 '
 'static void get_name_record_locale(enum OPENTYPE_PLATFORM_ID platform, USHORT lang_id, WCHAR *locale, USHORT locale_len)
 '{
