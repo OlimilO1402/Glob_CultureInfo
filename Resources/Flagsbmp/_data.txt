@@ -1,255 +1,263 @@
-AF, AFG, Afghanistan.bmp
-EG, EGY, Ägypten.bmp
-AX, ALA, Åland.bmp
-AL, ALB, Albanien.bmp
-DZ, DZA, Algerien.bmp
-VI, VIR, Amerikanische Jungferninseln.bmp
-AS, ASM, Amerikanisch-Samoa.bmp
-AD, AND, Andorra.bmp
-AO, AGO, Angola.bmp
-AI, AIA, Anguilla.bmp
-AQ, ATA, Antarktika.bmp
-AG, ATG, Antigua und Barbuda.bmp
-GQ, GNQ, Äquatorialguinea.bmp
-AR, ARG, Argentinien.bmp
-AM, ARM, Armenien.bmp
-AW, ABW, Aruba.bmp
-AZ, AZE, Aserbaidschan.bmp
-ET, ETH, Äthiopien.bmp
-AU, AUS, Australien.bmp
-BS, BHS, Bahamas.bmp
-BH, BHR, Bahrain.bmp
-BD, BGD, Bangladesch.bmp
-BB, BRB, Barbados.bmp
-TF, ATF, Bassas da India.bmp
-BY, BLR, Belarus.bmp
-BE, BEL, Belgien.bmp
-BZ, BLZ, Belize.bmp
-BJ, BEN, Benin.bmp
-BM, BMU, Bermuda.bmp
-BT, BTN, Bhutan.bmp
-BO, BOL, Bolivien.bmp
-BA, BIH, Bosnien und Herzegowina.bmp
-BW, BWA, Botsuana.bmp
-BV, BVT, Bouvetinsel.bmp
-BR, BRA, Brasilien.bmp
-VG, VGB, Britische Jungferninseln.bmp
-IO, IOT, Britisches Territorium im Indischen Ozean.bmp
-BN, BRN, Brunei Darussalam.bmp
-BG, BGR, Bulgarien.bmp
-BF, BFA, Burkina Faso.bmp
-BI, BDI, Burundi.bmp
-CL, CHL, Chile.bmp
-CN, CHN, China.bmp
-FR, Frau, Clipperton.bmp
-CK, COK, Cookinseln.bmp
-CR, CRI, Costa Rica.bmp
-CI, CIV, Côte d´Ivoire.bmp
-DK, DNK, Dänemark.bmp
-DE, DEU, Deutschland.bmp
-DM, DMA, Dominica.bmp
-DO, DOM, Dominikanische Republik.bmp
-DJ, DJI, Dschibuti.bmp
-EC, ECU, Ecuador.bmp
-SV, SLV, El Salvador.bmp
-ER, ERI, Eritrea.bmp
-EE, EST, Estland.bmp
-TF, ATF, Europa (Insel).bmp
-FK, FLK, Falklandinseln.bmp
-FO, FRO, Färöer.bmp
-FJ, FJI, Fidschi.bmp
-FI, FIN, Finnland.bmp
-FX, FXX, France, Metropolitan.bmp
-FR, FRA, Frankreich.bmp
-TF, ATF, Französische Süd- und Antarktisgebiete.bmp
-GF, GUF, Französisch-Guayana.bmp
-PF, PYF, Französisch-Polynesien.bmp
-GA, GAB, Gabun.bmp
-GM, GMB, Gambia.bmp
-PS, PSE, Gazastreifen.bmp
-GE, GEO, Georgien.bmp
-GH, GHA, Ghana.bmp
-GI, GIB, Gibraltar.bmp
-TF, ATF, Glorieuses.bmp
-GD, GRD, Grenada.bmp
-GR, GRC, Griechenland.bmp
-GL, GRL, Grönland.bmp
-GB, GBR, Großbritannien.bmp
-GP, GLP, Guadeloupe.bmp
-GU, GUM, Guam.bmp
-GT, GTM, Guatemala.bmp
-GG, GGY, Guernsey.bmp
-GN, GIN, Guinea.bmp
-GW, GNB, Guinea-Bissau.bmp
-GY, GUY, Guyana.bmp
-HT, HTI, Haiti.bmp
-HM, HMD, Heard und McDonaldinseln.bmp
-HN, HND, Honduras.bmp
-HK, HKG, Hongkong.bmp
-IN, IND, Indien.bmp
-ID, IDN, Indonesien.bmp
-IM, IMN, Insel Man.bmp
-IQ, IRQ, Irak.bmp
-IR, IRN, Iran.bmp
-IE, IRL, Irland.bmp
-IS, ISL, Island.bmp
-IL, ISR, Israel.bmp
-IT, ITA, Italien.bmp
-JM, JAM, Jamaika.bmp
-JP, JPN, Japan.bmp
-YE, YEM, Jemen.bmp
-JE, JEY, Jersey.bmp
-JO, JOR, Jordanien.bmp
-TF, ATF, Juan de Nova.bmp
-KY, CYM, Kaimaninseln.bmp
-KH, KHM, Kambodscha.bmp
-CM, CMR, Kamerun.bmp
-CA, CAN, Kanada.bmp
-CV, CPV, Kap Verde.bmp
-KZ, KAZ, Kasachstan.bmp
-QA, QAT, Katar.bmp
-KE, KEN, Kenia.bmp
-KG, KGZ, Kirgisistan.bmp
-KI, KIR, Kiribati.bmp
-UM, UMI, Kleinere Amerikanische Überseeinseln.bmp
-CC, CCK, Kokosinseln (Keelinginseln).bmp
-CO, COL, Kolumbien.bmp
-KM, COM, Komoren.bmp
-CG, COG, Kongo.bmp
-CD, COD, Kongo, Demokratische Republik.bmp
-KP, PRK, Korea, Demokratische Volksrepublik.bmp
-KR, KOR, Korea, Republik.bmp
-HR, HRV, Kroatien.bmp
-CU, CUB, Kuba.bmp
-KW, KWT, Kuwait.bmp
-LA, LAO, Laos.bmp
-LS, LSO, Lesotho.bmp
-LV, LVA, Lettland.bmp
-LB, LBN, Libanon.bmp
-LR, LBR, Liberia.bmp
-LY, LBY, Libyen.bmp
-LI, LIE, Liechtenstein.bmp
-LT, LTU, Litauen.bmp
-LU, LUX, Luxemburg.bmp
-MO, MAC, Macau.bmp
-MG, MDG, Madagaskar.bmp
-MW, MWI, Malawi.bmp
-MY, MYS, Malaysia.bmp
-MV, MDV, Malediven.bmp
-ML, MLI, Mali.bmp
-MT, MLT, Malta.bmp
-MA, MAR, Marokko.bmp
-MH, MHL, Marshallinseln.bmp
-MQ, MTQ, Martinique.bmp
-MR, MRT, Mauretanien.bmp
-MU, MUS, Mauritius.bmp
-YT, MYT, Mayotte.bmp
-MK, MKD, Mazedonien.bmp
-MX, MEX, Mexiko.bmp
-FM, FSM, Mikronesien.bmp
-MD, MDA, Moldau.bmp
-MC, MCO, Monaco.bmp
-MN, MNG, Mongolei.bmp
-ME, MNE, Montenegro.bmp
-MS, MSR, Montserrat.bmp
-MZ, MOZ, Mosambik.bmp
-MM, MMR, Myanmar.bmp
-NA, NAM, Namibia.bmp
-NR, NRU, Nauru.bmp
-NP, NPL, Nepal.bmp
-NC, NCL, Neukaledonien.bmp
-NZ, NZL, Neuseeland.bmp
-NI, NIC, Nicaragua.bmp
-NL, NLD, Niederlande.bmp
-AN, ANT, Niederländische Antillen.bmp
-NE, NER, Niger.bmp
-NG, NGA, Nigeria.bmp
-NU, NIU, Niue.bmp
-MP, MNP, Nördliche Marianen.bmp
-NF, NFK, Norfolkinsel.bmp
-NO, NOR, Norwegen.bmp
-OM, OMN, Oman.bmp
-AT, AUT, Österreich.bmp
-PK, PAK, Pakistan.bmp
-PW, PLW, Palau.bmp
-PA, PAN, Panama.bmp
-PG, PNG, Papua-Neuguinea.bmp
-PY, PRY, Paraguay.bmp
-PE, PER, Peru.bmp
-PH, PHL, Philippinen.bmp
-PN, PCN, Pitcairninseln.bmp
-PL, POL, Polen.bmp
-PT, PRT, Portugal.bmp
-PR, PRI, Puerto Rico.bmp
-RE, REU, Réunion.bmp
-RW, RWA, Ruanda.bmp
-RO, ROU, Rumänien.bmp
-RU, RUS, Russische Föderation.bmp
-MF, MAF, Saint-Martin.bmp
-SB, SLB, Salomonen.bmp
-ZM, ZMB, Sambia.bmp
-WS, WSM, Samoa.bmp
-SM, SMR, San Marino.bmp
-ST, STP, São Tomé und Príncipe.bmp
-SA, SAU, Saudi-Arabien.bmp
-SE, SWE, Schweden.bmp
-CH, CHE, Schweiz.bmp
-SN, SEN, Senegal.bmp
-RS, SRB, Serbien.bmp
-CS, SCG, Serbien und Montenegro.bmp
-SC, SYC, Seychellen.bmp
-SL, SLE, Sierra Leone.bmp
-ZW, ZWE, Simbabwe.bmp
-SG, SGP, Singapur.bmp
-SK, SVK, Slowakei.bmp
-SI, SVN, Slowenien.bmp
-SO, SOM, Somalia.bmp
-ES, ESP, Spanien.bmp
-SJ, SJM, Spitzbergen.bmp
-LK, LKA, Sri Lanka.bmp
-BL, BLM, St. Barthélemy.bmp
-SH, SHN, St. Helena, Ascension und Tristan da Cunha.bmp
-KN, KNA, St. Kitts und Nevis.bmp
-LC, LCA, St. Lucia.bmp
-PM, SPM, St. Pierre und Miquelon.bmp
-VC, VCT, St. Vincent und die Grenadinen.bmp
-ZA, ZAF, Südafrika.bmp
-SD, SDN, Sudan.bmp
-GS, SGS, Südgeorgien und die Südlichen Sandwichinseln.bmp
-SR, SUR, Suriname.bmp
-SZ, SWZ, Swasiland.bmp
-SY, SYR, Syrien.bmp
-TJ, TJK, Tadschikistan.bmp
-TW, TWN, Taiwan.bmp
-TZ, TZA, Tansania.bmp
-TH, THA, Thailand.bmp
-TL, TLS, Timor-Leste.bmp
-TG, TGO, Togo.bmp
-TK, TKL, Tokelau.bmp
-TO, TON, Tonga.bmp
-TT, TTO, Trinidad und Tobago.bmp
-TF, ATF, Tromelin.bmp
-TD, TCD, Tschad.bmp
-CZ, CZE, Tschechische Republik.bmp
-TN, TUN, Tunesien.bmp
-TR, TUR, Türkei.bmp
-TM, TKM, Turkmenistan.bmp
-TC, TCA, Turks- und Caicosinseln.bmp
-TV, TUV, Tuvalu.bmp
-UG, UGA, Uganda.bmp
-UA, UKR, Ukraine.bmp
-HU, HUN, Ungarn.bmp
-UY, URY, Uruguay.bmp
-UZ, UZB, Usbekistan.bmp
-VU, VUT, Vanuatu.bmp
-VA, VAT, Vatikanstadt.bmp
-VE, VEN, Venezuela.bmp
-AE, ARE, Vereinigte Arabische Emirate.bmp
-US, USA, Vereinigte Staaten.bmp
-VN, VNM, Vietnam.bmp
-WF, WLF, Wallis und Futuna.bmp
-CX, CXR, Weihnachtsinsel.bmp
-PS, PSE, Westjordanland.bmp
-EH, ESH, Westsahara.bmp
-CF, CAF, Zentralafrikanische Republik.bmp
-CY, CYP, Zypern.bmp
+ABW, Aruba.bmp
+AFG, Afghanistan.bmp
+AFU, African Union.bmp
+AGO, Angola.bmp
+AIA, Anguilla.bmp
+ALA, Aaland.bmp
+ALB, Albania.bmp
+AND, Andorra.bmp
+ANT, Netherlands Antilles.bmp
+ARE, United Arab Emirates.bmp
+ARG, Argentina.bmp
+ARM, Armenia.bmp
+ASE, Association of Southeast Asian Nations.bmp
+ASM, American Samoa.bmp
+ATA, Antarktika.bmp
+ATF, French Colonies.bmp
+ATG, Antigua and Barbuda.bmp
+AUS, Australia.bmp
+AUT, Austria.bmp
+AZE, Azerbaijan.bmp
+BDI, Burundi.bmp
+BEL, Belgium.bmp
+BEN, Benin.bmp
+BES, Bonaire-Sint Eustatius-Saba.bmp
+BFA, Burkina Faso.bmp
+BGD, Bangladesh.bmp
+BGR, Bulgaria.bmp
+BHR, Bahrain.bmp
+BHS, Bahamas.bmp
+BIH, Bosnia and Herzegovina.bmp
+BLM, Saint-Barthelemy.bmp
+BLR, Belarus.bmp
+BLZ, Belize.bmp
+BMU, Bermuda.bmp
+BOL, Bolivia.bmp
+BRA, Brazil.bmp
+BRB, Barbados.bmp
+BRN, Brunei Darussalam.bmp
+BTN, Bhutan.bmp
+BVT, Bouvetinsel.bmp
+BWA, Botswana.bmp
+CAF, Central African Republic.bmp
+CAN, Canada.bmp
+CCK, Cocos Islands.bmp
+CHE, Switzerland.bmp
+CHL, Chile.bmp
+CHN, China.bmp
+CIV, Ivory Coast.bmp
+CMR, Cameroon.bmp
+COD, Democratic Republic of the Congo (Kinshasa).bmp
+COG, Congo, Republic of (Brazzaville).bmp
+COK, Cook Islands.bmp
+COL, Colombia.bmp
+COM, Comoros.bmp
+CPV, Cape Verde.bmp
+CRI, Costa Rica.bmp
+CUB, Cuba.bmp
+CUW, Curacao.bmp
+CXR, Christmas Island.bmp
+CYM, Cayman Islands.bmp
+CYP, Cyprus.bmp
+CZE, Czech Republic.bmp
+DEU, Germany.bmp
+DJI, Djibouti.bmp
+DMA, Dominica.bmp
+DNK, Denmark.bmp
+DOM, Dominican Republic.bmp
+DZA, Algeria.bmp
+ECU, Ecuador.bmp
+EGY, Egypt.bmp
+ERI, Eritrea.bmp
+ESH, Western Sahara.bmp
+ESP, Spain.bmp
+EST, Estonia.bmp
+ETH, Ethiopia.bmp
+EUN, European Union.bmp
+FIN, Finland.bmp
+FJI, Fiji.bmp
+FLK, Falkland Islands.bmp
+FRA, France.bmp
+FRO, Faroe Islands.bmp
+FSM, Micronesia, Federal States of.bmp
+FXX, French-Metropolitan.bmp
+GAB, Gabon.bmp
+GBR, United Kingdom.bmp
+GEO, Georgia.bmp
+GGY, Guernsey.bmp
+GHA, Ghana.bmp
+GIB, Gibraltar.bmp
+GIN, Guinea.bmp
+GLP, Guadeloupe.bmp
+GMB, Gambia.bmp
+GNB, Guinea-Bissau.bmp
+GNQ, Equatorial Guinea.bmp
+GRC, Greece.bmp
+GRD, Grenada.bmp
+GRL, Greenland.bmp
+GTM, Guatemala.bmp
+GUF, French Guayana.bmp
+GUM, Guam.bmp
+GUY, Guyana.bmp
+HKG, Hongkong.bmp
+HMD, Heard and McDonald Islands.bmp
+HND, Honduras.bmp
+HRV, Croatia.bmp
+HTI, Haiti.bmp
+HUN, Hungary.bmp
+IDN, Indonesia.bmp
+IMN, Isle of Man.bmp
+IND, India.bmp
+IOT, British Indian Ocean Territory.bmp
+IRL, Ireland.bmp
+IRN, Islamic Republic of Iran.bmp
+IRQ, Iraq.bmp
+ISL, Iceland.bmp
+ISR, Israel.bmp
+ITA, Italy.bmp
+JAM, Jamaica.bmp
+JEY, Jersey.bmp
+JOR, Jordan.bmp
+JPN, Japan.bmp
+KAZ, Kazakhstan.bmp
+KEN, Kenya.bmp
+KGZ, Kyrgyzstan.bmp
+KHM, Cambodia.bmp
+KIR, Kiribati.bmp
+KNA, Saint Kitts and Nevis.bmp
+KOR, Korea, Republic of (South Korea).bmp
+KWT, Kuwait.bmp
+LAO, Lao, People's Democratic Republic.bmp
+LBN, Lebanon.bmp
+LBR, Liberia.bmp
+LBY, Libya.bmp
+LCA, Saint Lucia.bmp
+LIE, Liechtenstein.bmp
+LKA, Sri Lanka.bmp
+LSO, Lesotho.bmp
+LTU, Lithuania.bmp
+LUX, Luxembourg.bmp
+LVA, Latvia.bmp
+MAC, Macau.bmp
+MAF, St. Martin.bmp
+MAR, Morocco.bmp
+MCO, Monaco.bmp
+MDA, Moldova, Republic of.bmp
+MDG, Madagascar.bmp
+MDV, Maldives.bmp
+MEX, Mexico.bmp
+MHL, Marshall Islands.bmp
+MKD, Macedonia, Rep. of.bmp
+MLI, Mali.bmp
+MLT, Malta.bmp
+MMR, Myanmar, Burma.bmp
+MNE, Montenegro.bmp
+MNG, Mongolia.bmp
+MNP, Northern Mariana Islands.bmp
+MOZ, Mozambique.bmp
+MRT, Mauritania.bmp
+MSR, Montserrat.bmp
+MTQ, Martinique.bmp
+MUS, Mauritius.bmp
+MWI, Malawi.bmp
+MYS, Malaysia.bmp
+MYT, Mayotte.bmp
+NAM, Namibia.bmp
+NCL, New Caledonia.bmp
+NCY, North Cyprus.bmp
+NER, Niger.bmp
+NFK, Norfolk Island.bmp
+NGA, Nigeria.bmp
+NIC, Nicaragua.bmp
+NIU, Niue.bmp
+NLD, Netherlands.bmp
+NOR, Norway.bmp
+NPL, Nepal.bmp
+NRU, Nauru.bmp
+NZL, New Zealand.bmp
+OMN, Oman.bmp
+PAK, Pakistan.bmp
+PAN, Panama.bmp
+PCN, Pitcairn Islands.bmp
+PER, Peru.bmp
+PHL, Philippines.bmp
+PLW, Palau.bmp
+PNG, Papua New Guinea.bmp
+POL, Poland.bmp
+PRI, Puerto Rico.bmp
+PRK, North Korea.bmp
+PRT, Portugal.bmp
+PRY, Paraguay.bmp
+PSE, Palestine.bmp
+PYF, French Polynesia.bmp
+QAT, Qatar.bmp
+RBK, Bergkarabach.bmp
+REU, Reunion.bmp
+ROU, Romania.bmp
+RUS, Russia.bmp
+RWA, Rwanda.bmp
+SAN, Union of South American Nations.bmp
+SAU, Saudi Arabia.bmp
+SCG, Serbia and Montenegro.bmp
+SDN, Sudan.bmp
+SEN, Senegal.bmp
+SGP, Singapore.bmp
+SGS, South Georgia and the South Sandwich Islands.bmp
+SHN, St. Helena.bmp
+SJM, Svalbard and Jan Mayen.bmp
+SLB, Solomon Islands.bmp
+SLD, Somaliland.bmp
+SLE, Sierra Leone.bmp
+SLV, El Salvador.bmp
+SMR, San Marino.bmp
+SOL, Somaliland.bmp
+SOM, Somalia.bmp
+SOS, South Ossetia.bmp
+SPM, Saint-Pierre und Miquelon.bmp
+SRB, Serbia.bmp
+SSD, South Sudan.bmp
+STP, Sao Tome and Principe.bmp
+SUR, Suriname.bmp
+SVK, Slovakia (Slovak Republic).bmp
+SVN, Slovenia.bmp
+SWE, Sweden.bmp
+SWZ, Swaziland.bmp
+SXM, Sint Maarten.bmp
+SYC, Seychelles.bmp
+SYR, Syria, Syrian Arab Republic.bmp
+TCA, Turks and Caicos Islands.bmp
+TCD, Chad.bmp
+TGO, Togo.bmp
+THA, Thailand.bmp
+TJK, Tajikistan.bmp
+TKL, Tokelau.bmp
+TKM, Turkmenistan.bmp
+TLS, East Timor Timor-Leste.bmp
+TON, Tonga.bmp
+TRN, Transnistria.bmp
+TTO, Trinidad and Tobago.bmp
+TUN, Tunisia.bmp
+TUR, Turkey.bmp
+TUV, Tuvalu.bmp
+TWN, Taiwan Republic of China.bmp
+TZA, Tanzania.bmp
+UGA, Uganda.bmp
+UKR, Ukraine.bmp
+UMI, United States Minor Outlying Islands.bmp
+URY, Uruguay.bmp
+USA, United States.bmp
+UZB, Uzbekistan.bmp
+VAT, Vatican City.bmp
+VCT, Saint Vincent and the Grenadines.bmp
+VEN, Venezuela.bmp
+VGB, British Virgin Islands.bmp
+VIR, U.S. Virgin Islands.bmp
+VNM, Vietnam.bmp
+VUT, Vanuatu.bmp
+WLF, Wallis and Futuna.bmp
+WSM, Samoa.bmp
+XKX, Kosovo.bmp
+YEM, Yemen.bmp
+ZAF, South Africa.bmp
+ZMB, Zambia.bmp
+ZWE, Zimbabwe.bmp

@@ -1,0 +1,1 @@
+dir /b *.bmp >_data.txt

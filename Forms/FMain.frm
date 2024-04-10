@@ -19,6 +19,14 @@ Begin VB.Form FMain
    ScaleHeight     =   6420
    ScaleWidth      =   23550
    StartUpPosition =   3  'Windows-Standard
+   Begin VB.CommandButton Command3 
+      Caption         =   "GetAllISO3s"
+      Height          =   375
+      Left            =   13320
+      TabIndex        =   8
+      Top             =   0
+      Width           =   2415
+   End
    Begin VB.CommandButton Command1 
       Caption         =   "Command1"
       Height          =   375
@@ -97,13 +105,13 @@ Begin VB.Form FMain
    End
    Begin VB.PictureBox Picture1 
       BorderStyle     =   0  'Kein
-      Height          =   255
+      Height          =   375
       Left            =   11880
-      ScaleHeight     =   255
-      ScaleWidth      =   615
+      ScaleHeight     =   375
+      ScaleWidth      =   735
       TabIndex        =   7
-      Top             =   120
-      Width           =   615
+      Top             =   30
+      Width           =   735
    End
 End
 Attribute VB_Name = "FMain"
@@ -116,6 +124,28 @@ Private m_CultureInfos As Collection 'Of CultureInfo
 Private m_ci As CultureInfo
 'Private m_de As CultureInfo
 'Private m_at As CultureInfo
+Private m_ISO3s As Collection
+
+Private Sub Command3_Click()
+    Dim ci As CultureInfo
+    Dim Key As String
+    Set m_ISO3s = New Collection
+    If m_CultureInfos Is Nothing Then
+        BtnListLCIDString_Click
+    End If
+    For Each ci In m_CultureInfos
+        Key = ci.AbbrevCountryName
+        If Not Col_Contains(m_ISO3s, Key) Then
+            m_ISO3s.Add ci.AbbrevCountryName, ci.AbbrevCountryName
+        End If
+    Next
+    MsgBox m_ISO3s.Count & " different countries"
+    Dim v, s As String
+    For Each v In m_ISO3s
+        s = s & v & vbCrLf
+    Next
+    Text1.Text = s
+End Sub
 
 Private Sub Form_Load()
     Me.Caption = App.EXEName & " v" & App.Major & "." & App.Minor & "." & App.Revision

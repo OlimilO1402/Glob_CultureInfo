@@ -7,17 +7,21 @@ Private m_Flags As Collection
 
 Public Function ReadFlagPics() As Boolean
     m_Path = App.Path & "\Resources\Flagsbmp\"
+    Set m_data = New Collection 'contains the filenames
     Set m_Flags = New Collection
-    Dim pfn As String, PFNs() As String: PFNs = ReadDataFile
-    Dim sISO() As String, key As String
-    Dim i As Long, spic As StdPicture
+    Dim PFN As String, PFNs() As String: PFNs = ReadDataFile
+    Dim sa() As String, Key As String
+    Dim i As Long
     For i = 0 To UBound(PFNs)
-        pfn = PFNs(i)
-        sISO = Split(pfn, ", ")
-        key = sISO(1)
-        Set spic = LoadPicture(m_Path & pfn)
-        If Not Col_Contains(m_Flags, key) Then
-            m_Flags.Add spic, key
+        PFN = PFNs(i)
+        If Len(PFN) Then
+            sa = Split(PFN, ", ")
+            Key = sa(0)
+            If Col_Contains(m_data, Key) Then
+                'MsgBox "bereits enthalten: " & vbCrLf & m_data(key) & vbCrLf & pfn
+            Else
+                m_data.Add PFN, Key
+            End If
         End If
     Next
 End Function
@@ -39,6 +43,17 @@ Public Property Get Flag(key_ISO3 As String) As StdPicture
     If Len(key_ISO3) = 0 Then Exit Property
     If Col_Contains(m_Flags, key_ISO3) Then
         Set Flag = m_Flags(key_ISO3)
+    Else
+        Dim spic As StdPicture
+        Dim PFN As String
+        If Col_Contains(m_data, key_ISO3) Then
+            PFN = m_data(key_ISO3)
+            Set spic = LoadPicture(m_Path & PFN)
+            If Not Col_Contains(m_Flags, key_ISO3) Then
+                m_Flags.Add spic, key_ISO3
+                Set Flag = spic
+            End If
+        End If
     End If
 End Property
 '
