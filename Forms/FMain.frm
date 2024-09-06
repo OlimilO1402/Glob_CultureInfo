@@ -129,12 +129,12 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub Form_Resize()
-    Dim l As Single, T As Single, W As Single, H As Single
-    l = List1.Left: T = List1.Top: W = List1.Width
-    H = Me.ScaleHeight - T
-    If W > 0 And H > 0 Then List1.Move l, T, W, H
+    Dim l As Single, t As Single, W As Single, H As Single
+    l = List1.Left: t = List1.Top: W = List1.Width
+    H = Me.ScaleHeight - t
+    If W > 0 And H > 0 Then List1.Move l, t, W, H
     l = Text1.Left: W = Me.ScaleWidth - l
-    If W > 0 And H > 0 Then Text1.Move l, T, W, H
+    If W > 0 And H > 0 Then Text1.Move l, t, W, H
 End Sub
 
 Private Sub BtnListLCIDString_Click()
@@ -142,7 +142,7 @@ Private Sub BtnListLCIDString_Click()
     'Set m_CultureInfos = MLocale.GetCultureInfos(Mode_EnumSystemLocale, MLocale.LCID_INSTALLED)
     Set m_CultureInfos = MLocale.GetCultureInfos(Mode_EnumSystemLocaleEx, MLocale.LOCALE_ALL)
     UpdateViewList
-    MFlags.ReadFlagPics
+    'MFlags.ReadFlagPics
 End Sub
 
 Private Sub BtnLCIDEnum_Click()
@@ -325,7 +325,7 @@ Sub UpdateViewDetails()
         s = ""
     Else
         With m_ci
-            Dim sIso3 As String: sIso3 = .AbbrevCountryName
+            Dim sISO3 As String: sISO3 = .AbbrevCountryName
             Dim llcid As Long: llcid = .lcid
             s = s & "LCID        : " & CStr(llcid) & "(d) = &H" & Hex(llcid) & vbCrLf
             s = s & "Name        : " & .Name & vbCrLf
@@ -334,5 +334,14 @@ Sub UpdateViewDetails()
         End With
     End If
     Text1.Text = s
-    Set Picture1.Picture = MFlags.Flag(sIso3)
+    'Set Picture1.Picture = MFlags.Flag(sIso3)
+    Set Picture1.Picture = GetPicFromRes(sISO3) 'LoadResPicture(sISO3, VBRUN.LoadResConstants.vbResBitmap)
 End Sub
+
+Function GetPicFromRes(ByVal sISO3 As String) As StdPicture
+Try: On Error GoTo Catch
+    If Len(sISO3) <> 3 Then Exit Function
+    Set GetPicFromRes = LoadResPicture(sISO3, VBRUN.LoadResConstants.vbResBitmap)
+Catch:
+End Function
+
