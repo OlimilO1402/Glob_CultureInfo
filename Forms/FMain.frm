@@ -4,7 +4,7 @@ Begin VB.Form FMain
    ClientHeight    =   6420
    ClientLeft      =   120
    ClientTop       =   465
-   ClientWidth     =   18375
+   ClientWidth     =   19230
    BeginProperty Font 
       Name            =   "Segoe UI"
       Size            =   9.75
@@ -17,8 +17,40 @@ Begin VB.Form FMain
    Icon            =   "FMain.frx":0000
    LinkTopic       =   "Form1"
    ScaleHeight     =   6420
-   ScaleWidth      =   18375
+   ScaleWidth      =   19230
    StartUpPosition =   3  'Windows-Standard
+   Begin VB.CommandButton Command1 
+      Caption         =   "Command1"
+      Height          =   375
+      Left            =   18360
+      TabIndex        =   11
+      Top             =   0
+      Width           =   735
+   End
+   Begin VB.ComboBox CmbISO3 
+      Height          =   375
+      Left            =   11160
+      TabIndex        =   10
+      Text            =   "CmbISO3"
+      Top             =   0
+      Width           =   2295
+   End
+   Begin VB.ComboBox CmbLCIDVal 
+      Height          =   375
+      Left            =   15960
+      TabIndex        =   9
+      Text            =   "CmbLCIDVal"
+      Top             =   0
+      Width           =   2295
+   End
+   Begin VB.ComboBox CmbLCIDNam 
+      Height          =   375
+      Left            =   13560
+      TabIndex        =   8
+      Text            =   "CmbLCIDNam"
+      Top             =   0
+      Width           =   2295
+   End
    Begin VB.CommandButton BtnTestELCID 
       Caption         =   "Test ELCID"
       Height          =   375
@@ -56,14 +88,6 @@ Begin VB.Form FMain
       Height          =   375
       Left            =   0
       TabIndex        =   1
-      Top             =   0
-      Width           =   2055
-   End
-   Begin VB.CommandButton BtnGetAllISO3s 
-      Caption         =   "GetAllISO3s"
-      Height          =   375
-      Left            =   11280
-      TabIndex        =   8
       Top             =   0
       Width           =   2055
    End
@@ -126,15 +150,21 @@ Private m_ISO3s As Collection
 
 Private Sub Form_Load()
     Me.Caption = App.EXEName & " v" & App.Major & "." & App.Minor & "." & App.Revision
+    FillCombos
+End Sub
+
+Sub FillCombos()
+    FillCombosLCID
+    FillComboISO3
 End Sub
 
 Private Sub Form_Resize()
-    Dim l As Single, t As Single, W As Single, H As Single
-    l = List1.Left: t = List1.Top: W = List1.Width
-    H = Me.ScaleHeight - t
-    If W > 0 And H > 0 Then List1.Move l, t, W, H
-    l = Text1.Left: W = Me.ScaleWidth - l
-    If W > 0 And H > 0 Then Text1.Move l, t, W, H
+    Dim l As Single, t As Single, w As Single, h As Single
+    l = List1.Left: t = List1.Top: w = List1.Width
+    h = Me.ScaleHeight - t
+    If w > 0 And h > 0 Then List1.Move l, t, w, h
+    l = Text1.Left: w = Me.ScaleWidth - l
+    If w > 0 And h > 0 Then Text1.Move l, t, w, h
 End Sub
 
 Private Sub BtnListLCIDString_Click()
@@ -243,7 +273,8 @@ Private Sub BtnTestELCID_Click()
     
 End Sub
 
-Private Sub BtnGetAllISO3s_Click()
+Private Sub FillComboISO3()
+    CmbISO3.Clear
     Dim ci As CultureInfo
     Dim Key As String
     Set m_ISO3s = New Collection
@@ -256,12 +287,14 @@ Private Sub BtnGetAllISO3s_Click()
             m_ISO3s.Add ci.AbbrevCountryName, ci.AbbrevCountryName
         End If
     Next
-    MsgBox m_ISO3s.Count & " different countries"
+    MPtr.Col_Sort m_ISO3s
+    'MsgBox m_ISO3s.Count & " different countries"
     Dim v, s As String
     For Each v In m_ISO3s
-        s = s & v & vbCrLf
+        s = v
+        CmbISO3.AddItem s
     Next
-    Text1.Text = s
+    'Text1.Text = s
     Set Picture1.Picture = Nothing
 End Sub
 
@@ -343,5 +376,92 @@ Try: On Error GoTo Catch
     If Len(sISO3) <> 3 Then Exit Function
     Set GetPicFromRes = LoadResPicture(sISO3, VBRUN.LoadResConstants.vbResBitmap)
 Catch:
+End Function
+
+Sub FillCombosLCID()
+    Dim s As String
+    Dim i As Long
+    CmbLCIDNam.Clear
+    CmbLCIDVal.Clear
+    For i = 0 To 65536
+        s = MLCID.ELCID_ToStr(i)
+        If Len(s) Then
+            CmbLCIDNam.AddItem s
+            CmbLCIDVal.AddItem "&H" & Hex(i)
+        End If
+    Next
+End Sub
+
+Private Sub CmbLCIDNam_Click()
+    Dim s As String: s = CmbLCIDNam.Text
+    If Len(s) = 0 Then Exit Sub
+    Dim h As Long: h = MLCID.ELCID_Parse(s)
+    CmbLCIDVal.Text = IIf(h = 0, "", "&H" & Hex(h))
+    Dim i As Long
+    Set m_ci = FilterCultureInfo_ByLCID(h, i)
+    List1.ListIndex = i
+End Sub
+Private Sub CmbLCIDNam_KeyDown(KeyCode As Integer, Shift As Integer)
+    If KeyCode <> KeyCodeConstants.vbKeyReturn Then Exit Sub
+    CmbLCIDNam_Click
+End Sub
+
+Private Sub CmbLCIDVal_Click()
+    Dim s As String: s = Trim(CmbLCIDVal.Text)
+    If Len(s) = 0 Then Exit Sub
+    Dim h As Long: h = CLng(s)
+    If h = 0 Then
+        CmbLCIDNam.Text = ""
+    Else
+        s = MLCID.ELCID_ToStr(h)
+        If Len(s) = 0 Then Exit Sub
+        CmbLCIDNam.Text = s
+    End If
+End Sub
+Private Sub CmbLCIDVal_KeyDown(KeyCode As Integer, Shift As Integer)
+    If KeyCode <> KeyCodeConstants.vbKeyReturn Then Exit Sub
+    CmbLCIDVal_Click
+End Sub
+
+Private Sub CmbISO3_Click()
+    Dim s As String: s = LCase(CmbISO3.Text)
+    If Len(s) = 0 Then Exit Sub
+    Dim i As Long
+    Set m_ci = FilterCultureInfo_ByAbbrevCountryName(s, i)
+    List1.ListIndex = i
+'    For i = 1 To m_CultureInfos.Count
+'        Set ci = m_CultureInfos.Item(i)
+'        If LCase(ci.AbbrevCountryName) = s Then
+'            Text1.Text = ci.ToInfoStr
+'        End If
+'    Next
+End Sub
+
+Private Sub CmbISO3_KeyDown(KeyCode As Integer, Shift As Integer)
+    If KeyCode <> KeyCodeConstants.vbKeyReturn Then Exit Sub
+    CmbISO3_Click
+End Sub
+
+Function FilterCultureInfo_ByAbbrevCountryName(sISO3 As String, ByRef i_out As Long) As CultureInfo
+    Dim ci As CultureInfo
+    Dim i As Long
+    For i = 1 To m_CultureInfos.Count
+        Set ci = m_CultureInfos.Item(i)
+        If LCase(ci.AbbrevCountryName) = sISO3 Then Exit For
+    Next
+    i_out = i - 1
+    Set FilterCultureInfo_ByAbbrevCountryName = ci
+End Function
+
+Function FilterCultureInfo_ByLCID(aLCID As ELCID, ByRef i_out As Long) As CultureInfo
+    Dim ci As CultureInfo
+    Dim i As Long, c As Long: c = m_CultureInfos.Count
+    For i = 1 To c
+        Set ci = m_CultureInfos.Item(i)
+        If ci.lcid = aLCID Then Exit For
+    Next
+    If c < i Then Exit Function
+    i_out = i - 1
+    Set FilterCultureInfo_ByLCID = ci
 End Function
 

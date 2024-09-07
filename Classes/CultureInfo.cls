@@ -12,7 +12,7 @@ Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
-'https://learn.microsoft.com/de-de/windows/win32/intl/locale-information-constants
+'https:/        /learn.microsoft.com/de-de/windows/win32/intl/locale-information-constants
 'Class CultureInfo
 'Stellt Informationen über eine bestimmte Kultur bereit
 '(die bei der nicht verwalteten Codeentwicklung als "locale" bezeichnet wird).
@@ -1010,3 +1010,4 @@ End Property
 ''Public Property Get NumFmt_DigitSubstitution() As DigitShapes
 ''    '
 ''End Property
+    
