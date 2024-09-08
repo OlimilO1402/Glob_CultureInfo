@@ -3,7 +3,7 @@
 
 [![GitHub](https://img.shields.io/github/license/OlimilO1402/Glob_CultureInfo?style=plastic)](https://github.com/OlimilO1402/Glob_CultureInfo/blob/main/LICENSE)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/OlimilO1402/Glob_CultureInfo?style=plastic)](https://github.com/OlimilO1402/Glob_CultureInfo/releases/latest)
-[![Github All Releases](https://img.shields.io/github/downloads/OlimilO1402/Glob_CultureInfo/total.svg)](https://github.com/OlimilO1402/Glob_CultureInfo/releases/download/v2024.9.6/LCIDCultureInfo_v2024.9.6.zip)
+[![Github All Releases](https://img.shields.io/github/downloads/OlimilO1402/Glob_CultureInfo/total.svg)](https://github.com/OlimilO1402/Glob_CultureInfo/releases/download/v2024.9.8/LCIDCultureInfo_v2024.9.8.zip)
 ![GitHub followers](https://img.shields.io/github/followers/OlimilO1402?style=social)  
 
 Project started in spring 2006.  
