@@ -84,17 +84,28 @@ Private Function CALLBACK_EnumLocalesProcEx(ByVal unnamedParam1 As LongPtr, ByVa
     m_Locales.Add ci, ci.Name
     CALLBACK_EnumLocalesProcEx = 1
 End Function
-
-Public Function LCIDEnumToStr() As String
-    If m_Locales Is Nothing Then Exit Function
-    If m_Locales.Count = 0 Then Exit Function
-    Dim s As String
-    s = "Public Enum ELCID" & vbCrLf
-    Dim v, c As CultureInfo
-    For Each v In m_Locales
-        Set c = v
-        s = s & "    elcid_" & Replace(c.Name, "-", "_") & " = " & c.LCID_ToHex & vbCrLf
-        
-    Next
-    LCIDEnumToStr = s & "End Enum" & vbCrLf
-End Function
+'
+'Public Function LCIDEnumToStr() As String
+'    If m_Locales Is Nothing Then Exit Function
+'    If m_Locales.Count = 0 Then Exit Function
+'    Dim s As String
+'    s = "Public Enum ELCID" & vbCrLf
+'    Dim v, c As CultureInfo
+'    For Each v In m_Locales
+'        Set c = v
+'        s = s & "    elcid_" & Replace(c.Name, "-", "_") & " = " & c.LCID_ToHex & vbCrLf
+'    Next
+'    Dim s2 As String
+'    s = s & "End Enum" & vbCrLf & vbCrLf
+'    s2 = s2 & "Public Function ELCID_ToStr(ByVal e As ELCID) As String" & vbCrLf
+'    s2 = s2 & "    Dim s As String" & vbCrLf
+'    s2 = s2 & "    Select Case e" & vbCrLf
+'    For Each v In m_Locales
+'        Set c = v
+'        s2 = s2 & "    Case " & c.LCID_ToHex & ": s = " & "elcid_" & Replace(c.Name, "-", "_") & vbCrLf
+'    Next
+'    s2 = s2 & "    End Select" & vbCrLf
+'    s2 = s2 & "    ELCID_ToStr = s" & vbCrLf
+'    s2 = s2 & "End Function" & vbCrLf
+'    LCIDEnumToStr = s & s2
+'End Function

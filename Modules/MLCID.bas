@@ -1490,3 +1490,52 @@ Public Function ELCID_Parse(s As String) As ELCID
     End Select
     ELCID_Parse = e
 End Function
+
+Public Function LCIDEnumToStr() As String
+    
+    Dim hlNam As Collection: Set hlNam = New Collection
+    Dim hlVal As Collection: Set hlVal = New Collection
+    Dim i As Long, s As String, maxlen As Long
+    For i = 1 To 65536
+        s = ELCID_ToStr(i)
+        If Len(s) Then
+            s = Replace(s, "-", "_")
+            maxlen = Max(maxlen, Len(s))
+            hlNam.Add s
+            hlVal.Add i
+        End If
+    Next
+    
+    Dim s1 As String
+    s1 = "Option Explicit" & vbCrLf & _
+        "Public Enum ELCID" & vbCrLf
+    For i = 1 To hlNam.Count
+        s1 = s1 & "    lcid_" & hlNam.Item(i) & " = &H" & Hex(hlVal.Item(i)) & vbCrLf
+    Next
+    s1 = s1 & "End Enum" & vbCrLf & vbCrLf
+    
+    Dim s2 As String
+    s2 = s2 & "Public Function ELCID_ToStr(ByVal e As ELCID) As String" & vbCrLf
+    s2 = s2 & "    Dim s As String" & vbCrLf
+    s2 = s2 & "    Select Case e" & vbCrLf
+    For i = 1 To hlVal.Count
+        s2 = s2 & "    Case &H" & Hex(hlVal.Item(i)) & ": s = " & """" & Replace(hlNam.Item(i), "_", "-") & """" & vbCrLf
+    Next
+    s2 = s2 & "    End Select" & vbCrLf
+    s2 = s2 & "    ELCID_ToStr = s" & vbCrLf
+    s2 = s2 & "End Function" & vbCrLf & vbCrLf
+    
+    Dim s3 As String
+    s3 = s3 & "Public Function ELCID_Parse(s As String) As ELCID" & vbCrLf
+    s3 = s3 & "    Dim e As ELCID" & vbCrLf
+    s3 = s3 & "    Select Case s" & vbCrLf
+    's3 = s3 & "    Case "ar":      e = ELCID.lcid_ar
+    For i = 1 To hlVal.Count
+        s = hlNam.Item(i)
+        s3 = s3 & "    Case " & """" & Replace(s, "_", "-") & """:" & Space(maxlen - Len(s)) & " e = &H" & Hex(hlVal.Item(i)) & vbCrLf
+    Next
+    s3 = s3 & "    End Select" & vbCrLf
+    s3 = s3 & "    ELCID_Parse = e" & vbCrLf
+    s3 = s3 & "End Function" & vbCrLf
+    LCIDEnumToStr = s1 & s2 & s3
+End Function

@@ -4,7 +4,7 @@ Begin VB.Form FMain
    ClientHeight    =   6420
    ClientLeft      =   120
    ClientTop       =   465
-   ClientWidth     =   19230
+   ClientWidth     =   18615
    BeginProperty Font 
       Name            =   "Segoe UI"
       Size            =   9.75
@@ -17,80 +17,8 @@ Begin VB.Form FMain
    Icon            =   "FMain.frx":0000
    LinkTopic       =   "Form1"
    ScaleHeight     =   6420
-   ScaleWidth      =   19230
+   ScaleWidth      =   18615
    StartUpPosition =   3  'Windows-Standard
-   Begin VB.CommandButton Command1 
-      Caption         =   "Command1"
-      Height          =   375
-      Left            =   18360
-      TabIndex        =   11
-      Top             =   0
-      Width           =   735
-   End
-   Begin VB.ComboBox CmbISO3 
-      Height          =   375
-      Left            =   11160
-      TabIndex        =   10
-      Text            =   "CmbISO3"
-      Top             =   0
-      Width           =   2295
-   End
-   Begin VB.ComboBox CmbLCIDVal 
-      Height          =   375
-      Left            =   15960
-      TabIndex        =   9
-      Text            =   "CmbLCIDVal"
-      Top             =   0
-      Width           =   2295
-   End
-   Begin VB.ComboBox CmbLCIDNam 
-      Height          =   375
-      Left            =   13560
-      TabIndex        =   8
-      Text            =   "CmbLCIDNam"
-      Top             =   0
-      Width           =   2295
-   End
-   Begin VB.CommandButton BtnTestELCID 
-      Caption         =   "Test ELCID"
-      Height          =   375
-      Left            =   8160
-      TabIndex        =   5
-      Top             =   0
-      Width           =   2055
-   End
-   Begin VB.CommandButton BtnGetMaxNameLen 
-      Caption         =   "MaxNameLen"
-      Height          =   375
-      Left            =   6120
-      TabIndex        =   4
-      Top             =   0
-      Width           =   2055
-   End
-   Begin VB.CommandButton BtnTestDefaults 
-      Caption         =   "Test Defaults"
-      Height          =   375
-      Left            =   4080
-      TabIndex        =   3
-      Top             =   0
-      Width           =   2055
-   End
-   Begin VB.CommandButton BtnLCIDEnum 
-      Caption         =   "lcid-Enum"
-      Height          =   375
-      Left            =   2040
-      TabIndex        =   6
-      Top             =   0
-      Width           =   2055
-   End
-   Begin VB.CommandButton BtnListLCIDString 
-      Caption         =   "List All Languages"
-      Height          =   375
-      Left            =   0
-      TabIndex        =   1
-      Top             =   0
-      Width           =   2055
-   End
    Begin VB.TextBox Text1 
       BeginProperty Font 
          Name            =   "Consolas"
@@ -102,11 +30,11 @@ Begin VB.Form FMain
          Strikethrough   =   0   'False
       EndProperty
       Height          =   4815
-      Left            =   10200
+      Left            =   10320
       MultiLine       =   -1  'True
       ScrollBars      =   3  'Beides
-      TabIndex        =   2
-      Top             =   360
+      TabIndex        =   1
+      Top             =   600
       Width           =   8175
    End
    Begin VB.ListBox List1 
@@ -124,18 +52,86 @@ Begin VB.Form FMain
       Left            =   0
       List            =   "FMain.frx":1784
       TabIndex        =   0
-      Top             =   360
-      Width           =   10215
+      Top             =   600
+      Width           =   10335
    End
-   Begin VB.PictureBox Picture1 
+   Begin VB.ComboBox CmbLCIDVal 
+      Height          =   375
+      Left            =   5760
+      TabIndex        =   7
+      Text            =   "CmbLCIDVal"
+      Top             =   120
+      Width           =   2295
+   End
+   Begin VB.ComboBox CmbLCIDNam 
+      Height          =   375
+      Left            =   3360
+      TabIndex        =   6
+      Text            =   "CmbLCIDNam"
+      Top             =   120
+      Width           =   2295
+   End
+   Begin VB.ComboBox CmbISO3 
+      Height          =   375
+      Left            =   960
+      TabIndex        =   8
+      Text            =   "CmbISO3"
+      Top             =   120
+      Width           =   2295
+   End
+   Begin VB.PictureBox PanelFlag 
       BorderStyle     =   0  'Kein
+      Height          =   615
+      Left            =   0
+      ScaleHeight     =   615
+      ScaleWidth      =   975
+      TabIndex        =   9
+      Top             =   0
+      Width           =   975
+      Begin VB.PictureBox PBFlag 
+         AutoSize        =   -1  'True
+         BorderStyle     =   0  'Kein
+         Height          =   330
+         Left            =   240
+         Picture         =   "FMain.frx":1786
+         ScaleHeight     =   330
+         ScaleWidth      =   465
+         TabIndex        =   10
+         Top             =   120
+         Width           =   465
+      End
+   End
+   Begin VB.CommandButton BtnGetMaxNameLen 
+      Caption         =   "MaxNameLen"
+      Height          =   375
+      Left            =   16440
+      TabIndex        =   3
+      Top             =   120
+      Width           =   2055
+   End
+   Begin VB.CommandButton BtnTestDefaults 
+      Caption         =   "Test Defaults"
+      Height          =   375
+      Left            =   14400
+      TabIndex        =   2
+      Top             =   120
+      Width           =   2055
+   End
+   Begin VB.CommandButton BtnLCIDEnum 
+      Caption         =   "lcid-Enum"
+      Height          =   375
+      Left            =   12360
+      TabIndex        =   5
+      Top             =   120
+      Width           =   2055
+   End
+   Begin VB.CommandButton BtnTestELCID 
+      Caption         =   "Test ELCID"
       Height          =   375
       Left            =   10320
-      ScaleHeight     =   375
-      ScaleWidth      =   735
-      TabIndex        =   7
-      Top             =   0
-      Width           =   735
+      TabIndex        =   4
+      Top             =   120
+      Width           =   2055
    End
 End
 Attribute VB_Name = "FMain"
@@ -159,12 +155,12 @@ Sub FillCombos()
 End Sub
 
 Private Sub Form_Resize()
-    Dim l As Single, t As Single, w As Single, h As Single
-    l = List1.Left: t = List1.Top: w = List1.Width
-    h = Me.ScaleHeight - t
-    If w > 0 And h > 0 Then List1.Move l, t, w, h
-    l = Text1.Left: w = Me.ScaleWidth - l
-    If w > 0 And h > 0 Then Text1.Move l, t, w, h
+    Dim L As Single, T As Single, W As Single, h As Single
+    L = List1.Left: T = List1.Top: W = List1.Width
+    h = Me.ScaleHeight - T
+    If W > 0 And h > 0 Then List1.Move L, T, W, h
+    L = Text1.Left: W = Me.ScaleWidth - L
+    If W > 0 And h > 0 Then Text1.Move L, T, W, h
 End Sub
 
 Private Sub BtnListLCIDString_Click()
@@ -176,7 +172,8 @@ Private Sub BtnListLCIDString_Click()
 End Sub
 
 Private Sub BtnLCIDEnum_Click()
-    Text1.Text = MLocale.LCIDEnumToStr
+    'Text1.Text = MLocale.LCIDEnumToStr
+    Text1.Text = MLCID.LCIDEnumToStr
 End Sub
 
 Private Sub BtnTestDefaults_Click()
@@ -186,10 +183,10 @@ Private Sub BtnTestDefaults_Click()
     Dim ciiv As CultureInfo: Set ciiv = m_ci.InvariantCulture
     Dim cipa As CultureInfo: Set cipa = m_ci.Parent
     
-    MsgBox ciud.Name & "  " & ciud.lcid & "  " & ciud.LCID_ToHex & "  " & "UserDefaultCulture"
-    MsgBox cidt.Name & "  " & cidt.lcid & "  " & cidt.LCID_ToHex & "  " & "DefaultThreadCurrentCulture"
-    MsgBox ciiv.Name & "  " & ciiv.lcid & "  " & ciiv.LCID_ToHex & "  " & "InvariantCulture"
-    MsgBox cipa.Name & "  " & cipa.lcid & "  " & cipa.LCID_ToHex & "  " & "Parent"
+    MsgBox ciud.Name & "  " & ciud.lcid & "  " & ciud.LCID_ToHex & "  " & "UserDefaultCulture" & vbCrLf & _
+           cidt.Name & "  " & cidt.lcid & "  " & cidt.LCID_ToHex & "  " & "DefaultThreadCurrentCulture" & vbCrLf & _
+           ciiv.Name & "  " & ciiv.lcid & "  " & ciiv.LCID_ToHex & "  " & "InvariantCulture" & vbCrLf & _
+           cipa.Name & "  " & cipa.lcid & "  " & cipa.LCID_ToHex & "  " & "Parent"
     
 End Sub
 
@@ -199,7 +196,6 @@ End Sub
 
 Private Sub BtnTestELCID_Click()
     
-    Dim lcid As Long
     
     'lcid = MLang.MAKELANGID(7, &H400)
     
@@ -257,19 +253,17 @@ Private Sub BtnTestELCID_Click()
 '
 '    Set ci_de = MNew.CultureInfo(&H407)
 '    MsgBox ci_de.Name
-'
-    Dim ci_en As CultureInfo
-
-    Set ci_en = MNew.CultureInfo(&H9)
-    MsgBox ci_en.Name
-
-    Set ci_en = MNew.CultureInfo(&H409)
     
-    MsgBox ci_en.Name
-    MsgBox ci_en.ToStr
+    Dim lcid   As Long
+    lcid = &H9
+    Dim ci_en1 As CultureInfo: Set ci_en1 = MNew.CultureInfo(lcid)
+    lcid = &H409
+    Dim ci_en2 As CultureInfo: Set ci_en2 = MNew.CultureInfo(lcid)
     
-    MsgBox ci_en.DisplayName
-    MsgBox ci_en.EnglishName
+    MsgBox ci_en1.Name & " - " & ci_en2.Name & vbCrLf & _
+           ci_en2.ToStr & vbCrLf & _
+           ci_en2.DisplayName & vbCrLf & _
+           ci_en2.EnglishName
     
 End Sub
 
@@ -295,7 +289,7 @@ Private Sub FillComboISO3()
         CmbISO3.AddItem s
     Next
     'Text1.Text = s
-    Set Picture1.Picture = Nothing
+    'Set PBFlag.Picture = Nothing
 End Sub
 
 Private Sub CreateCultureInfos()
@@ -366,9 +360,15 @@ Sub UpdateViewDetails()
             s = s & .ToInfoStr & vbCrLf
         End With
     End If
+    CmbISO3.Text = m_ci.AbbrevCountryName
+    CmbLCIDNam.Text = m_ci.Name
+    CmbLCIDVal.Text = "&H" & Hex(m_ci.lcid)
     Text1.Text = s
-    'Set Picture1.Picture = MFlags.Flag(sIso3)
-    Set Picture1.Picture = GetPicFromRes(sISO3) 'LoadResPicture(sISO3, VBRUN.LoadResConstants.vbResBitmap)
+    Set PBFlag.Picture = GetPicFromRes(sISO3)
+    'PBFlag.AutoSize = True
+    Dim L As Single: L = (PanelFlag.ScaleWidth - PBFlag.ScaleWidth) / 2
+    Dim T As Single: T = (PanelFlag.ScaleHeight - PBFlag.ScaleHeight) / 2
+    If L > 0 And T > 0 Then PBFlag.Move L, T
 End Sub
 
 Function GetPicFromRes(ByVal sISO3 As String) As StdPicture
@@ -398,7 +398,9 @@ Private Sub CmbLCIDNam_Click()
     Dim h As Long: h = MLCID.ELCID_Parse(s)
     CmbLCIDVal.Text = IIf(h = 0, "", "&H" & Hex(h))
     Dim i As Long
-    Set m_ci = FilterCultureInfo_ByLCID(h, i)
+    Set m_ci = FilterCultureInfo_ByLCIDName(s, i)
+    If m_ci Is Nothing Then Exit Sub
+    CmbISO3.Text = m_ci.AbbrevCountryName
     List1.ListIndex = i
 End Sub
 Private Sub CmbLCIDNam_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -451,6 +453,18 @@ Function FilterCultureInfo_ByAbbrevCountryName(sISO3 As String, ByRef i_out As L
     Next
     i_out = i - 1
     Set FilterCultureInfo_ByAbbrevCountryName = ci
+End Function
+
+Function FilterCultureInfo_ByLCIDName(lcidName As String, ByRef i_out As Long) As CultureInfo
+    Dim ci As CultureInfo
+    Dim i As Long, c As Long: c = m_CultureInfos.Count
+    For i = 1 To c
+        Set ci = m_CultureInfos.Item(i)
+        If LCase(ci.Name) = LCase(lcidName) Then Exit For
+    Next
+    If c < i Then Exit Function
+    i_out = i - 1
+    Set FilterCultureInfo_ByLCIDName = ci
 End Function
 
 Function FilterCultureInfo_ByLCID(aLCID As ELCID, ByRef i_out As Long) As CultureInfo
