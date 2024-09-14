@@ -8,7 +8,6 @@ Module=MNew; Modules\MNew.bas
 Module=MLocale; Modules\MLocale.bas
 Module=MLang; Modules\MLang.bas
 Module=MLCID; Modules\MLCID.bas
-Module=MFlags; Modules\MFlags.bas
 Module=MMain; Modules\MMain.bas
 Class=CultureInfo; Classes\CultureInfo.cls
 ResFile32="Resources\MyRes.res"
